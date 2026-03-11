@@ -34,7 +34,7 @@ export default function SignupPage() {
   useEffect(() => {
     if (state?.success) {
       const timer = setTimeout(() => {
-        router.push("/login");
+        router.push("/admin");
       }, 2000);
       return () => clearTimeout(timer);
     }
@@ -66,7 +66,7 @@ export default function SignupPage() {
                 </div>
               </div>
               <h2 className="text-2xl font-bold text-slate-900">Registration Successful!</h2>
-              <p className="text-slate-600">Your account has been created. Redirecting to login...</p>
+              <p className="text-slate-600">Your account has been created. Redirecting to dashboard...</p>
             </div>
           ) : (
             <form action={formAction} className="space-y-8">

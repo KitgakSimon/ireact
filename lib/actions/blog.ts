@@ -110,10 +110,6 @@ export async function postComment(postId: string, data: { content: string; ratin
     return { error: "Please provide a valid rating (1-5)." };
   }
 
-  if (!session && !guestName) {
-    return { error: "Please provide your name to comment." };
-  }
-
   try {
     const comment = await prisma.comment.create({
       data: {
@@ -121,12 +117,12 @@ export async function postComment(postId: string, data: { content: string; ratin
         rating,
         postId,
         userId: session ? (session.id as string) : null,
-        guestName: session ? null : guestName,
+        guestName: session ? null : "Anonymous",
         guestEmail: session ? null : guestEmail,
       },
     });
 
-    revalidatePath(`/blog/[slug]`);
+    revalidatePath(`/blog/[slug]`, "page");
     return { success: true, comment };
   } catch (error) {
     console.error("Post comment error:", error);
@@ -136,11 +132,19 @@ export async function postComment(postId: string, data: { content: string; ratin
 
 export async function deleteComment(id: string) {
   const session = await getSession();
-  if (!session || session.role !== "ADMIN") return { error: "Unauthorized" };
+  if (!session) return { error: "Unauthorized" };
 
   try {
+    const comment = await prisma.comment.findUnique({ where: { id } });
+    if (!comment) return { error: "Comment not found" };
+
+    if (session.role !== "ADMIN" && session.id !== comment.userId) {
+      return { error: "Unauthorized" };
+    }
+
     await prisma.comment.delete({ where: { id } });
     revalidatePath("/admin/comments");
+    revalidatePath(`/blog/[slug]`, "page");
     return { success: true };
   } catch (error) {
     return { error: "Error deleting comment" };
@@ -150,7 +154,7 @@ export async function deleteComment(id: string) {
 export async function updateComment(id: string, data: { content: string; rating: number }) {
   const session = await getSession();
   
-  if (!session || session.role !== "ADMIN") {
+  if (!session) {
     return { error: "Unauthorized" };
   }
 
@@ -161,6 +165,13 @@ export async function updateComment(id: string, data: { content: string; rating:
   }
 
   try {
+    const existingComment = await prisma.comment.findUnique({ where: { id } });
+    if (!existingComment) return { error: "Comment not found" };
+
+    if (session.role !== "ADMIN" && session.id !== existingComment.userId) {
+      return { error: "Unauthorized" };
+    }
+
     const comment = await prisma.comment.update({
       where: { id },
       data: {

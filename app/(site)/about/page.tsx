@@ -4,7 +4,8 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { CheckCircle2, Target, Heart, Eye } from "lucide-react";
 import Hero from "@/components/common/Hero";
-import CTA from "@/components/common/CTA";
+import TestimonialSlider from "@/components/about/TestimonialSlider";
+import TeamSection from "@/components/about/TeamSection";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -108,15 +109,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <CTA 
-        title="Want to learn more?"
-        subtitle="Get in touch with our team or explore our current opportunities."
-        primaryButtonText="Contact Us"
-        primaryButtonHref="/contact"
-        secondaryButtonText="Explore Open Roles"
-        secondaryButtonHref="/opportunities"
-        theme="sky"
-      />
+      <TestimonialSlider />
+      <TeamSection />
     </div>
   );
 }

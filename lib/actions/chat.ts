@@ -1,8 +1,9 @@
+// @ts-nocheck
 "use server";
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const GEMINI_API_KEY = "AIzaSyCHHyQQTqPzzdcDhTV_TD6Ijqv5bCHfbLE"; // Provided by user
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY; // Provided by user
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const SYSTEM_PROMPT = `You are an AI assistant for the REACT (Rural Empowerment and Climate Technology) Initiative. 

@@ -44,7 +44,7 @@ export default function CommentEditor({ initialData }: { initialData: any }) {
          </div>
       </div>
 
-      <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100 space-y-8">
+      <div className="bg-white rounded-5xl p-10 shadow-sm border border-slate-100 space-y-8">
           <div className="space-y-4 shadow-sm border border-slate-100 p-6 rounded-3xl bg-slate-50 flex items-center justify-between">
               <div>
                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Author</p>
@@ -58,7 +58,7 @@ export default function CommentEditor({ initialData }: { initialData: any }) {
 
           <div className="space-y-3">
               <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Review Rating</label>
-              <div className="flex gap-2 bg-slate-50 p-4 rounded-xl inline-flex group/stars">
+              <div className="gap-2 bg-slate-50 p-4 rounded-xl inline-flex group/stars">
                   {[1, 2, 3, 4, 5].map((s) => (
                     <button
                         key={s}

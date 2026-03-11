@@ -63,3 +63,12 @@ model Newsletter {
   email     String   @unique
   createdAt DateTime @default(now())
 }
+
+model Campaign {
+  id        String   @id @default(cuid())
+  subject   String
+  content   String   @db.Text
+  template  String
+  sentCount Int      @default(0)
+  createdAt DateTime @default(now())
+}

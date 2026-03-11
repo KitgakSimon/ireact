@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Loader2, Info } from "lucide-react";
+import { MessageCircle, X, Send, Loader2, Info, Bot } from "lucide-react";
 import { generateChatResponse } from "@/lib/actions/chat";
 
 export default function ChatBot() {
@@ -13,9 +13,9 @@ export default function ChatBot() {
 
   const quickActions = [
     {
-      label: "What is REACT?",
+      label: "What is IREACT?",
       userPrompt: "What is the REACT Initiative?",
-      botResponse: "The REACT (Rural Empowerment and Climate Technology) Initiative is a youth-led organization focused on advancing climate resilience, humanitarian response, and sustainable development. We empower underserved and rural communities across Africa through innovative technology and community-driven action."
+      botResponse: "The IREACT (Rural Empowerment and Climate Technology) Initiative is a youth-led organization focused on advancing climate resilience, humanitarian response, and sustainable development. We empower underserved and rural communities across Africa through innovative technology and community-driven action."
     },
     {
       label: "Read Impact Stories",
@@ -83,7 +83,7 @@ export default function ChatBot() {
         className={`fixed bottom-6 right-6 h-14 w-14 rounded-full bg-brand-forest text-white shadow-2xl flex items-center justify-center transition-all hover:bg-brand-dark hover:scale-110 active:scale-95 z-9999 ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         aria-label="Open AI Assistant"
       >
-        <MessageCircle size={24} />
+        <Bot size={24} />
       </button>
 
       <div 
@@ -94,10 +94,10 @@ export default function ChatBot() {
           <div className="absolute inset-0 bg-linear-to-r from-brand-forest to-brand-teal opacity-50"></div>
           <div className="relative z-10 flex items-center gap-3">
              <div className="h-10 w-10 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md">
-                <MessageCircle size={20} className="text-white" />
+                <Bot size={20} className="text-white" />
              </div>
              <div>
-                <h3 className="font-black text-sm">REACT Assistant</h3>
+                <h3 className="font-black text-sm">IREACT Assistant</h3>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-white/70">Powered by Gemini AI</p>
              </div>
           </div>
@@ -117,7 +117,7 @@ export default function ChatBot() {
                   <Info size={32} />
                </div>
                <div className="space-y-2 px-6">
-                  <h4 className="font-black text-slate-900">Welcome to REACT!</h4>
+                  <h4 className="font-black text-slate-900">Welcome to IREACT!</h4>
                   <p className="text-sm font-medium text-slate-500">I'm an AI assistant. How can I help you today?</p>
                </div>
                <div className="flex flex-col gap-2 w-full mt-4 px-4 overflow-y-auto max-h-[220px] pb-2">
@@ -125,9 +125,10 @@ export default function ChatBot() {
                    <button 
                       key={idx}
                       onClick={() => handleActionClick(action.userPrompt, action.botResponse)}
-                      className="w-full text-left px-4 py-3 bg-white border border-slate-200 rounded-xl text-[13px] font-bold text-slate-700 hover:border-brand-forest hover:text-brand-forest shadow-sm hover:shadow-md transition-all whitespace-nowrap overflow-hidden text-ellipsis"
+                      className="w-full shrink-0 flex items-center gap-3 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:border-brand-forest hover:text-brand-forest shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
                    >
-                     ⚡ {action.label}
+                     <span className="text-amber-500 text-lg leading-none">⚡</span>
+                     <span className="truncate">{action.label}</span>
                    </button>
                  ))}
                </div>
@@ -164,7 +165,7 @@ export default function ChatBot() {
         <div className="p-4 bg-white border-t border-slate-100 rounded-b-4xl">
           <form 
             onSubmit={(e) => { e.preventDefault(); handleSend(); }}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 mb-3"
           >
             <input 
               type="text" 
@@ -181,6 +182,18 @@ export default function ChatBot() {
               <Send size={16} className="ml-0.5" />
             </button>
           </form>
+
+          <div className="flex items-center justify-center gap-2 text-xs font-semibold text-slate-500 bg-emerald-50/80 py-2.5 rounded-xl border border-emerald-100">
+             <span>Need human help?</span>
+             <a 
+               href="https://wa.me/2349032772384" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="text-emerald-700 font-bold hover:text-emerald-800 transition-all flex items-center gap-1.5 bg-white px-2 py-1 rounded-md shadow-sm border border-emerald-200 hover:shadow-md"
+             >
+               <MessageCircle size={14} className="fill-emerald-500 text-emerald-500" /> Chat on WhatsApp
+             </a>
+          </div>
         </div>
       </div>
     </>

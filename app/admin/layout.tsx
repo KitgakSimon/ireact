@@ -8,7 +8,9 @@ import {
   LayoutDashboard, 
   ArrowLeft, 
   Settings,
-  Bell
+  Bell,
+  Mail,
+  Send
 } from "lucide-react";
 import Logo from "@/components/common/Logo";
 
@@ -28,6 +30,8 @@ export default async function AdminLayout({
     { name: "Users", href: "/admin/users", icon: <Users size={20} /> },
     { name: "Blog Posts", href: "/admin/blog", icon: <FileText size={20} /> },
     { name: "Comments", href: "/admin/comments", icon: <MessageSquare size={20} /> },
+    { name: "Subscribers", href: "/admin/subscribers", icon: <Mail size={20} /> },
+    { name: "Campaigns", href: "/admin/campaigns", icon: <Send size={20} /> },
   ];
 
   return (

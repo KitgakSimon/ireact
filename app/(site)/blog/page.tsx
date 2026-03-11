@@ -2,6 +2,14 @@ import Hero from "@/components/common/Hero";
 import { BlogCard } from "@/components/blog/BlogComponents";
 import prisma from "@/lib/prisma";
 
+// Utility to create a safe plaintext excerpt from HTML content
+function createExcerpt(htmlContent: string, maxLength: number = 150) {
+  if (!htmlContent) return "";
+  const plainText = htmlContent.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ");
+  if (plainText.length <= maxLength) return plainText;
+  return plainText.substring(0, plainText.lastIndexOf(" ", maxLength)) + "...";
+}
+
 export default async function BlogListingPage() {
   const posts = await prisma.post.findMany({
     where: { published: true },
@@ -48,7 +56,8 @@ export default async function BlogListingPage() {
                   ...post,
                   date: new Date(post.createdAt).toLocaleDateString(),
                   author: post.author.name,
-                  rating: avgRating
+                  rating: avgRating,
+                  excerpt: createExcerpt(post.content)
                 }} index={index} />
               );
             })}

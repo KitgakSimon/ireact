@@ -13,10 +13,12 @@ import {
   Lightbulb,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Hero from "@/components/common/Hero";
+import HeroCarousel from "@/components/common/HeroCarousel";
 import CTA from "@/components/common/CTA";
 import { BlogSection } from "@/components/blog/BlogComponents";
 import GallerySection from "@/components/home/GallerySection";
+import TestimonialSlider from "@/components/about/TestimonialSlider";
+import TeamSection from "@/components/about/TeamSection";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -37,15 +39,35 @@ export default function HomeClient({ posts }: { posts: any[] }) {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <Hero 
-        title="Empowering Communities, Resilience Built Locally"
-        subtitle="We bridge the gap between climate solutions, technology, and people by empowering communities with practical tools and knowledge."
-        backgroundImage="/images/gallery/IMG_2276.jpg"
+      <HeroCarousel 
+        slides={[
+          {
+            title: "Empowering Communities, Resilience Built Locally",
+            subtitle: "We bridge the gap between climate solutions, technology, and people by empowering communities with practical tools and knowledge.",
+            backgroundImage: "/images/gallery/IMG_2276.jpg"
+          },
+          {
+            title: "Sustainable Climate Action",
+            subtitle: "Advancing climate resilience and sustainable development in underserved communities through grassroots innovation.",
+            backgroundImage: "/images/gallery/IMG_2022.JPG"
+          },
+          {
+            title: "Environmental Restoration",
+            subtitle: "Restoring ecosystems through community-led reforestation, landscape management, and hands-on conservation.",
+            backgroundImage: "/images/gallery/IMG_2023.JPG"
+          },
+          {
+            title: "Empowering Youth Leadership",
+            subtitle: "Supporting the next generation to lead climate action and drive sustainable change from the ground up.",
+            backgroundImage: "/images/gallery/IMG_2021.JPG"
+          }
+        ]}
         height="full"
         titleSize="xl"
         scrollTarget="#about-us"
+        intervalMs={6000}
       >
-        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row mt-12">
+        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row mt-8">
           <Link 
             href="/about" 
             className="group flex w-full items-center justify-center gap-2 rounded-full bg-white px-8 py-4 text-base font-bold text-brand-dark transition-all hover:bg-slate-100 hover:shadow-xl sm:w-auto"
@@ -60,7 +82,7 @@ export default function HomeClient({ posts }: { posts: any[] }) {
             Explore Pillars
           </Link>
         </div>
-      </Hero>
+      </HeroCarousel>
 
       {/* About Section - Brief */}
       <section id="about-us" className="section-padding bg-white relative overflow-hidden square-grid">
@@ -185,6 +207,12 @@ export default function HomeClient({ posts }: { posts: any[] }) {
                 desc: "Empowering the next generation to lead climate action and grassroots innovation.",
                 icon: <Users className="h-8 w-8" />,
                 color: "bg-violet-50 text-violet-600"
+              },
+              {
+                title: "Research for Sustainable Development",
+                desc: "Conducting data-driven research to inform policies and effectively address local climate challenges.",
+                icon: <Globe className="h-8 w-8" />,
+                color: "bg-sky-50 text-sky-600"
               }
             ].map((pillar, idx) => (
               <motion.div 
@@ -296,10 +324,12 @@ export default function HomeClient({ posts }: { posts: any[] }) {
         </div>
       </section>
 
+      
+      <TeamSection />
+      <TestimonialSlider />
       {/* Blog Section */}
       <BlogSection posts={posts} />
 
-      {/* Call to Action */}
       <CTA 
         title="Ready to make an impact?"
         subtitle="Join our network of ambassadors, partners, and community leaders. Together, we can build a resilient future."

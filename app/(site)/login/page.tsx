@@ -20,7 +20,7 @@ export default function LoginPage() {
         toast.success("Welcome back!", {
           description: "Logged in successfully."
         });
-        router.push("/");
+        router.push("/admin");
       } else if (result.error) {
         toast.error("Login failed", {
           description: result.error
