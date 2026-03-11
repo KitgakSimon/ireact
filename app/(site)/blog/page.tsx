@@ -1,10 +1,18 @@
-import { motion } from "framer-motion";
 import Hero from "@/components/common/Hero";
 import { BlogCard } from "@/components/blog/BlogComponents";
-import { getAllPosts } from "@/lib/blog";
+import prisma from "@/lib/prisma";
 
-export default function BlogListingPage() {
-  const posts = getAllPosts();
+export default async function BlogListingPage() {
+  const posts = await prisma.post.findMany({
+    where: { published: true },
+    include: { 
+      author: true,
+      comments: {
+        select: { rating: true }
+      }
+    },
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
     <div className="flex flex-col">
@@ -31,9 +39,19 @@ export default function BlogListingPage() {
           </div>
 
           <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post, index) => (
-              <BlogCard key={post.slug} post={post} index={index} />
-            ))}
+            {posts.map((post: any, index: number) => {
+              const totalRating = post.comments.reduce((acc: number, curr: any) => acc + curr.rating, 0);
+              const avgRating = post.comments.length > 0 ? totalRating / post.comments.length : 0;
+              
+              return (
+                <BlogCard key={post.slug} post={{
+                  ...post,
+                  date: new Date(post.createdAt).toLocaleDateString(),
+                  author: post.author.name,
+                  rating: avgRating
+                }} index={index} />
+              );
+            })}
           </div>
 
           {posts.length === 0 && (

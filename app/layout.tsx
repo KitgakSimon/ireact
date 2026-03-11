@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
 import Preloader from "@/components/common/Preloader";
+import { Toaster } from "sonner";
+import ChatBot from "@/components/common/ChatBot";
 
 export const metadata: Metadata = {
   title: "REACT Initiative | Rural Empowerment and Climate Technology",
@@ -19,11 +19,9 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className="antialiased min-h-screen flex flex-col">
         <Preloader />
-        <Navbar />
-        <main className="grow">
-          {children}
-        </main>
-        <Footer />
+        <Toaster position="top-right" richColors />
+        <ChatBot />
+        {children}
       </body>
     </html>
   );

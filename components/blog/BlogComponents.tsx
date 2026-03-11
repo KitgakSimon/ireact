@@ -3,19 +3,25 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Calendar, User, ArrowRight } from "lucide-react";
+import { Calendar, User, ArrowRight, Star } from "lucide-react";
 
 interface BlogPost {
   slug: string;
   title: string;
   date: string;
   excerpt: string;
-  image: string;
+  image?: string;
   category: string;
   author: string;
+  rating?: number;
 }
 
 export function BlogCard({ post, index }: { post: BlogPost; index: number }) {
+  // Defensive check for image to avoid "Image missing required src property: {}"
+  // This handles cases where post.image might be an empty string, null, or an unexpected object
+  const validImage = typeof post.image === 'string' && post.image.trim().length > 0;
+  const imageUrl = validImage ? post.image as string : "/images/gallery/IMG_2023.JPG";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -30,8 +36,8 @@ export function BlogCard({ post, index }: { post: BlogPost; index: number }) {
       >
         <div className="relative aspect-video overflow-hidden">
           <Image
-            src={post.image}
-            alt={post.title}
+            src={imageUrl}
+            alt={post.title || "Blog Post"}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-110"
           />
@@ -43,7 +49,7 @@ export function BlogCard({ post, index }: { post: BlogPost; index: number }) {
         </div>
 
         <div className="flex flex-1 flex-col p-8 md:p-10">
-          <div className="mb-6 flex flex-wrap items-center gap-6 text-xs font-bold uppercase tracking-widest text-slate-400">
+          <div className="mb-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs font-bold uppercase tracking-widest text-slate-400">
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4 text-brand-cyan" />
               {post.date}
@@ -52,6 +58,12 @@ export function BlogCard({ post, index }: { post: BlogPost; index: number }) {
               <User className="h-4 w-4 text-brand-teal" />
               {post.author}
             </div>
+            {post.rating !== undefined && post.rating > 0 && (
+              <div className="flex items-center gap-2 text-amber-500 bg-amber-50 px-3 py-1 rounded-full">
+                <Star className="h-3 w-3 fill-amber-500" />
+                {post.rating.toFixed(1)}
+              </div>
+            )}
           </div>
 
           <h3 className="mb-4 text-2xl font-extrabold leading-tight text-slate-900 group-hover:text-brand-forest transition-colors line-clamp-2">

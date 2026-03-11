@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight, User as UserIcon, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getSession, logout } from "@/lib/actions/auth";
 
 const navLinks = [
   { name: "About Us", href: "/about" },
@@ -18,12 +19,27 @@ const navLinks = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [session, setSession] = useState<any>(null);
   const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const s = await getSession();
+      setSession(s);
+    };
+    fetchSession();
+  }, [pathname]);
+
+  const handleLogout = async () => {
+    await logout();
+    setSession(null);
+    router.push("/login");
+  };
 
   return (
-    <nav
-      className="sticky top-0 z-50 w-full bg-white border-b border-slate-200/60 transition-all duration-300 px-6 py-4 md:px-12 shadow-sm"
-    >
+    <nav className="sticky top-0 z-50 w-full bg-white border-b border-slate-200/60 transition-all duration-300 px-6 py-4 md:px-12 shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
           <div className="relative h-14 w-36 overflow-hidden rounded-xl transition-all">
@@ -51,19 +67,64 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+
           <div className="flex items-center gap-4 border-l border-slate-200 pl-8">
-            <Link
-              href="/login"
-              className="text-sm font-bold text-slate-700 transition-all hover:text-brand-forest hover:opacity-80"
-            >
-              Log in
-            </Link>
-            <Link
-              href="/signup"
-              className="rounded-full bg-brand-forest px-6 py-2.5 text-sm font-bold text-white transition-all hover:bg-brand-dark hover:shadow-lg active:scale-95"
-            >
-              Get Started
-            </Link>
+            {session ? (
+              <div className="relative">
+                <button
+                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                  className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-bold text-slate-700 transition-all hover:bg-slate-100"
+                >
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-forest text-white">
+                    <UserIcon size={14} />
+                  </div>
+                  <span className="max-w-[100px] truncate">{session.name}</span>
+                  <ChevronDown size={14} className={cn("transition-transform", userDropdownOpen && "rotate-180")} />
+                </button>
+
+                <AnimatePresence>
+                  {userDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="absolute right-0 mt-3 w-56 overflow-hidden rounded-2xl bg-white p-2 shadow-2xl border border-slate-100"
+                    >
+                      <Link
+                        href="/admin"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-3 rounded-xl p-3 text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors"
+                      >
+                        <LayoutDashboard size={18} className="text-brand-cyan" />
+                        Admin Dashboard
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-3 rounded-xl p-3 text-sm font-bold text-rose-600 hover:bg-rose-50 transition-colors"
+                      >
+                        <LogOut size={18} />
+                        Logout
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-sm font-bold text-slate-700 transition-all hover:text-brand-forest hover:opacity-80"
+                >
+                  Log in
+                </Link>
+                <Link
+                  href="/signup"
+                  className="rounded-full bg-brand-forest px-6 py-2.5 text-sm font-bold text-white transition-all hover:bg-brand-dark hover:shadow-lg active:scale-95"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -100,21 +161,53 @@ export default function Navbar() {
                   <ArrowRight size={16} className="opacity-50" />
                 </Link>
               ))}
+              
               <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-3">
-                <Link
-                  href="/login"
-                  className="flex items-center justify-center p-4 rounded-xl border border-slate-200 text-base font-bold text-slate-700"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Log in
-                </Link>
-                <Link
-                  href="/signup"
-                  className="flex items-center justify-center p-4 rounded-xl bg-brand-forest text-white text-base font-bold shadow-lg"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Join REACT
-                </Link>
+                {session ? (
+                  <>
+                    <div className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 text-slate-700">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-forest text-white">
+                        <UserIcon size={20} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-black">{session.name}</p>
+                        <p className="text-xs text-slate-500">{session.email}</p>
+                      </div>
+                    </div>
+                    <Link
+                      href="/admin"
+                      className="flex items-center justify-center p-4 rounded-xl border border-slate-200 text-base font-bold text-slate-700 gap-2"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <LayoutDashboard size={20} className="text-brand-cyan" />
+                      Admin Dashboard
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center justify-center p-4 rounded-xl bg-rose-50 text-rose-600 text-base font-bold gap-2"
+                    >
+                      <LogOut size={20} />
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      className="flex items-center justify-center p-4 rounded-xl border border-slate-200 text-base font-bold text-slate-700"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Log in
+                    </Link>
+                    <Link
+                      href="/signup"
+                      className="flex items-center justify-center p-4 rounded-xl bg-brand-forest text-white text-base font-bold shadow-lg"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Join REACT
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>

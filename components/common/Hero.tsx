@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 interface HeroProps {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   backgroundImage: string;
   className?: string;
   children?: React.ReactNode;
@@ -33,9 +33,9 @@ export default function Hero({
   };
 
   const titleSizes = {
-    xl: "text-5xl md:text-7xl",
-    lg: "text-4xl md:text-6xl",
-    md: "text-3xl md:text-5xl"
+    xl: "text-4xl sm:text-5xl md:text-7xl",
+    lg: "text-3xl sm:text-4xl md:text-6xl",
+    md: "text-2xl sm:text-3xl md:text-5xl"
   };
 
   return (
@@ -63,19 +63,21 @@ export default function Hero({
             "mb-8 font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-2xl",
             titleSizes[titleSize]
           )}>
-            <span className="header-highlight highlight-cyan">{title}</span>
+            <span className="header-highlight highlight-cyan max-md:before:!hidden">{title}</span>
           </h1>
           
-          <div className="mx-auto mb-10 mt-14 max-w-2xl relative">
-            <div className="absolute -top-3 left-6 z-20">
-              <span className="bg-slate-900 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.5em] text-white border border-white/10 rounded-full shadow-lg backdrop-blur-md">
-                Foundation
-              </span>
+          {subtitle && (
+            <div className="mx-auto mb-10 mt-14 max-w-2xl relative">
+              <div className="absolute -top-3 left-6 z-20">
+                <span className="bg-slate-900 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.5em] text-white border border-white/10 rounded-full shadow-lg backdrop-blur-md">
+                  Foundation
+                </span>
+              </div>
+              <p className="text-lg text-slate-100/90 md:text-xl md:leading-relaxed backdrop-blur-sm py-6 px-8 rounded-4xl border border-white/10 bg-white/5 shadow-2xl">
+                {subtitle}
+              </p>
             </div>
-            <p className="text-lg text-slate-100/90 md:text-xl md:leading-relaxed backdrop-blur-sm py-6 px-8 rounded-4xl border border-white/10 bg-white/5 shadow-2xl">
-              {subtitle}
-            </p>
-          </div>
+          )}
           
           {children}
         </motion.div>

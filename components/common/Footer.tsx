@@ -9,9 +9,14 @@ import {
   Instagram, 
   Facebook,
   ArrowRight,
-  Phone
+  Phone,
+  Loader2,
+  Send
 } from "lucide-react";
 import Image from "next/image";
+import { subscribeNewsletter } from "@/lib/actions/newsletter";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
 
 const footerLinks = {
   navigation: [
@@ -19,7 +24,7 @@ const footerLinks = {
     { name: "About Us", href: "/about" },
     { name: "Our Pillars", href: "/#our-pillars" },
     { name: "Opportunities", href: "/opportunities" },
-    { name: "Impact stories", href: "#" },
+    { name: "Impact stories", href: "/blog" },
   ],
   pillars: [
     { name: "Agriculture", href: "#" },
@@ -43,6 +48,29 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [isPending, startTransition] = useTransition();
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("email", email);
+
+    startTransition(async () => {
+      const result = await subscribeNewsletter(formData);
+      if (result.success) {
+        toast.success("Welcome aboard!", {
+          description: "You've successfully subscribed to REACT perspectives."
+        });
+        setEmail("");
+      } else {
+        toast.error("Subscription failed", {
+          description: result.error || "Please try again later."
+        });
+      }
+    });
+  };
+
   return (
     <footer className="bg-slate-900 pt-24 pb-12 text-slate-300 overflow-hidden relative">
       {/* Dotted Grid Background */}
@@ -101,19 +129,28 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Pillars List */}
-          <div>
-            <h4 className="mb-8 font-bold text-white uppercase tracking-widest text-xs">Pillars</h4>
-            <ul className="space-y-4">
-              {footerLinks.pillars.map((linkItem) => (
-                <li key={linkItem.name}>
-                  <Link href={linkItem.href} className="text-sm font-medium transition-colors hover:text-brand-cyan hover:pl-2 inline-flex items-center gap-2 group">
-                    <span className="h-1 w-1 bg-brand-cyan rounded-full opacity-0 group-hover:opacity-100 transition-all"></span>
-                    {linkItem.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Newsletter Section */}
+          <div className="col-span-1">
+            <h4 className="mb-8 font-bold text-white uppercase tracking-widest text-xs">Stay Informed</h4>
+            <p className="text-sm text-slate-400 mb-6 font-medium">Join our network to receive localized perspectives on climate resilience.</p>
+            <form onSubmit={handleSubscribe} className="space-y-4">
+              <div className="relative group">
+                <input 
+                  type="email" 
+                  placeholder="Your email address" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-slate-800/50 border border-slate-700/50 rounded-2xl px-6 py-4 text-sm font-bold text-white outline-none focus:ring-2 focus:ring-brand-cyan/20 focus:border-brand-cyan transition-all"
+                />
+                <button 
+                  type="submit"
+                  disabled={isPending || !email}
+                  className="absolute right-2 top-2 h-10 w-10 rounded-xl bg-brand-forest text-white flex items-center justify-center transition-all hover:bg-brand-dark active:scale-95 disabled:opacity-50"
+                >
+                  {isPending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+                </button>
+              </div>
+            </form>
           </div>
 
           {/* Contact Details */}
@@ -144,7 +181,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-1">Email Support</span>
-                  <Link href="mailto:info@reactinitiative.org" className="text-sm hover:text-white transition-colors">info@reactinitiative.org</Link>
+                  <Link href="mailto:info@ireactinitiative.org" className="text-sm hover:text-white transition-colors">info@ireactinitiative.org</Link>
                 </div>
               </li>
             </ul>
@@ -165,7 +202,7 @@ export default function Footer() {
           
           <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-slate-100 border border-slate-700/50 rounded-full px-6 py-3 bg-slate-800/30">
             <span className="h-2 w-2 rounded-full bg-brand-cyan animate-pulse"></span>
-            Building Resilience
+            .Sustainable Communities Powered by Innovation
           </div>
         </div>
       </div>
