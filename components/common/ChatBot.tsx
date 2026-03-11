@@ -11,9 +11,23 @@ export default function ChatBot() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const predefinedPrompt = "What is the REACT Initiative?";
-  const predefinedResponse = 
-    "The REACT (Rural Empowerment and Climate Technology) Initiative is a youth-led organization focused on advancing climate resilience, humanitarian response, and sustainable development. We empower underserved and rural communities across Africa through innovative technology and community-driven action.";
+  const quickActions = [
+    {
+      label: "What is REACT?",
+      userPrompt: "What is the REACT Initiative?",
+      botResponse: "The REACT (Rural Empowerment and Climate Technology) Initiative is a youth-led organization focused on advancing climate resilience, humanitarian response, and sustainable development. We empower underserved and rural communities across Africa through innovative technology and community-driven action."
+    },
+    {
+      label: "Read Impact Stories",
+      userPrompt: "Where can I read your impact stories?",
+      botResponse: "You can find all our latest articles, news, and impact stories from the field on our Blog page. Navigate to /blog to read them!"
+    },
+    {
+      label: "View Gallery",
+      userPrompt: "Where can I see photos of your work?",
+      botResponse: "We have a dedicated photo gallery showcasing our fieldwork and community impact. You can view the photos by navigating to /gallery."
+    }
+  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -23,10 +37,10 @@ export default function ChatBot() {
     scrollToBottom();
   }, [messages]);
 
-  const handlePredefinedClick = () => {
+  const handleActionClick = (prompt: string, response: string) => {
     setMessages([
-      { role: "user", text: predefinedPrompt },
-      { role: "bot", text: predefinedResponse }
+      { role: "user", text: prompt },
+      { role: "bot", text: response }
     ]);
   };
 
@@ -66,17 +80,17 @@ export default function ChatBot() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 h-14 w-14 rounded-full bg-brand-forest text-white shadow-2xl flex items-center justify-center transition-all hover:bg-brand-dark hover:scale-110 active:scale-95 z-50 ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        className={`fixed bottom-6 right-6 h-14 w-14 rounded-full bg-brand-forest text-white shadow-2xl flex items-center justify-center transition-all hover:bg-brand-dark hover:scale-110 active:scale-95 z-9999 ${isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         aria-label="Open AI Assistant"
       >
         <MessageCircle size={24} />
       </button>
 
       <div 
-        className={`fixed bottom-6 right-6 w-[350px] sm:w-[400px] h-[550px] max-h-[85vh] bg-white rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col z-50 transition-all duration-300 transform origin-bottom-right ${isOpen ? 'scale-100 opacity-100' : 'scale-50 opacity-0 pointer-events-none'}`}
+        className={`fixed bottom-6 right-6 w-[350px] sm:w-[400px] h-[550px] max-h-[85vh] bg-white rounded-4xl shadow-2xl border border-slate-100 flex flex-col z-9999 transition-all duration-300 transform origin-bottom-right ${isOpen ? 'scale-100 opacity-100' : 'scale-50 opacity-0 pointer-events-none'}`}
       >
         {/* Header */}
-        <div className="bg-brand-forest text-white p-5 rounded-t-[2rem] flex items-center justify-between shadow-sm relative overflow-hidden">
+        <div className="bg-brand-forest text-white p-5 rounded-t-4xl flex items-center justify-between shadow-sm relative overflow-hidden">
           <div className="absolute inset-0 bg-linear-to-r from-brand-forest to-brand-teal opacity-50"></div>
           <div className="relative z-10 flex items-center gap-3">
              <div className="h-10 w-10 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md">
@@ -106,12 +120,17 @@ export default function ChatBot() {
                   <h4 className="font-black text-slate-900">Welcome to REACT!</h4>
                   <p className="text-sm font-medium text-slate-500">I'm an AI assistant. How can I help you today?</p>
                </div>
-               <button 
-                  onClick={handlePredefinedClick}
-                  className="px-6 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:border-brand-forest hover:text-brand-forest shadow-sm transition-all"
-               >
-                 👋 {predefinedPrompt}
-               </button>
+               <div className="flex flex-col gap-2 w-full mt-4 px-4 overflow-y-auto max-h-[220px] pb-2">
+                 {quickActions.map((action, idx) => (
+                   <button 
+                      key={idx}
+                      onClick={() => handleActionClick(action.userPrompt, action.botResponse)}
+                      className="w-full text-left px-4 py-3 bg-white border border-slate-200 rounded-xl text-[13px] font-bold text-slate-700 hover:border-brand-forest hover:text-brand-forest shadow-sm hover:shadow-md transition-all whitespace-nowrap overflow-hidden text-ellipsis"
+                   >
+                     ⚡ {action.label}
+                   </button>
+                 ))}
+               </div>
             </div>
           ) : (
             <>
@@ -142,7 +161,7 @@ export default function ChatBot() {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 bg-white border-t border-slate-100 rounded-b-[2rem]">
+        <div className="p-4 bg-white border-t border-slate-100 rounded-b-4xl">
           <form 
             onSubmit={(e) => { e.preventDefault(); handleSend(); }}
             className="flex items-center gap-2"
