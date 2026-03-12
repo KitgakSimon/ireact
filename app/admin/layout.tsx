@@ -6,7 +6,8 @@ import {
   FileText, 
   LayoutDashboard, 
   Mail, 
-  Send
+  Send,
+  Lock
 } from "lucide-react";
 import AdminNav from "@/components/admin/AdminNav";
 
@@ -40,6 +41,7 @@ export default async function AdminLayout({
     { name: "Comments", href: "/admin/comments", icon: <MessageSquare size={20} /> },
     { name: "Subscribers", href: "/admin/subscribers", icon: <Mail size={20} /> },
     { name: "Campaigns", href: "/admin/campaigns", icon: <Send size={20} /> },
+    { name: "Security", href: "/admin/settings/password", icon: <Lock size={20} /> },
   ];
 
   return (

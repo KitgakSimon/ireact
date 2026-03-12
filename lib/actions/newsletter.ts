@@ -33,8 +33,10 @@ export async function subscribeNewsletter(formData: FormData) {
         subject: "Welcome to the IREACT Community! 🌍",
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 20px; text-align: center;">
-            <img src="cid:logo" alt="IREACT Logo" style="height: 50px; margin-bottom: 20px;" />
-            <h2 style="color: #059669; margin-top: 0;">Welcome to IREACT!</h2>
+            <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ireactinitiative.org'}">
+              <img src="cid:logo" alt="REACT Logo" style="height: 50px; margin-bottom: 20px; border: none;" />
+            </a>
+            <h2 style="color: #059669; margin-top: 0;">Welcome to REACT!</h2>
             <div style="text-align: left;">
               <p>Thank you for subscribing to our newsletter. You're now part of a global youth-led community dedicated to climate resilience and sustainable development.</p>
               <p>We'll keep you updated with:</p>
@@ -105,8 +107,10 @@ export async function sendCampaign(formData: FormData) {
           html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 30px; border: 1px solid #eee; border-radius: 20px; color: #1e293b;">
               <div style="text-align: center; margin-bottom: 30px;">
-                <img src="cid:logo" alt="IREACT Logo" style="height: 60px; margin-bottom: 20px;" />
-                <h1 style="color: #059669; margin: 0;">IREACT Initiative</h1>
+                <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ireactinitiative.org'}">
+                  <img src="cid:logo" alt="REACT Logo" style="height: 60px; margin-bottom: 20px; border: none;" />
+                </a>
+                <h1 style="color: #059669; margin: 0;">REACT Initiative</h1>
                 <p style="text-transform: uppercase; font-size: 10px; letter-spacing: 2px; font-weight: bold; color: #64748b;">Rural Empowerment and Climate Technology</p>
               </div>
               <div style="line-height: 1.6; font-size: 16px;">

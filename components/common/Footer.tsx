@@ -11,7 +11,8 @@ import {
   ArrowRight,
   Phone,
   Loader2,
-  Send
+  Send,
+  Youtube
 } from "lucide-react";
 import Image from "next/image";
 import { subscribeNewsletter } from "@/lib/actions/newsletter";
@@ -45,6 +46,7 @@ const socialLinks = [
   { name: "LinkedIn", icon: <Linkedin size={18} />, href: "https://www.linkedin.com/company/eco360pedia/" },
   { name: "Instagram", icon: <Instagram size={18} />, href: "https://www.instagram.com/reactinitiative?igsh=dmRsYnVwZDVtazk2&utm_source=qr" },
   { name: "Facebook", icon: <Facebook size={18} />, href: "https://www.facebook.com/share/16ConLvZPu/?mibextid=wwXIfr" },
+  { name: "YouTube", icon: <Youtube size={18} />, href: "https://youtube.com/@reactmedia-z4p?si=yBj-PZjI3vHVRqGC" },
 ];
 
 export default function Footer() {

@@ -57,8 +57,10 @@ export async function createTeamMember(data: any) {
             html: `
               <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 24px; color: #1e293b; background-color: #ffffff;">
                 <div style="text-align: center; margin-bottom: 30px;">
-                  <img src="cid:logo" alt="IREACT Logo" style="height: 60px; margin-bottom: 20px;" />
-                  <h1 style="color: #059669; margin: 0; font-size: 28px; font-weight: 900;">IREACT Portal</h1>
+                  <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ireactinitiative.org'}">
+                    <img src="cid:logo" alt="REACT Logo" style="height: 60px; margin-bottom: 20px; border: none;" />
+                  </a>
+                  <h1 style="color: #059669; margin: 0; font-size: 28px; font-weight: 900;">REACT Portal</h1>
                   <p style="text-transform: uppercase; font-size: 10px; letter-spacing: 2px; font-weight: 800; color: #64748b; margin-top: 5px;">Administrative Access Granted</p>
                 </div>
                 
@@ -77,11 +79,11 @@ export async function createTeamMember(data: any) {
                 </div>
 
                 <div style="text-align: center; margin-bottom: 30px;">
-                  <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login" style="background-color: #059669; color: white; padding: 16px 35px; border-radius: 16px; text-decoration: none; font-weight: 900; display: inline-block; font-size: 15px; box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.2);">Access Dashboard</a>
+                  <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ireactinitiative.org'}/login" style="background-color: #059669; color: white; padding: 16px 35px; border-radius: 16px; text-decoration: none; font-weight: 900; display: inline-block; font-size: 15px; box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.2);">Access Dashboard</a>
                 </div>
 
                 <div style="padding-top: 25px; border-top: 1px solid #f1f5f9; font-size: 12px; color: #94a3b8; text-align: center;">
-                  © ${new Date().getFullYear()} IREACT Initiative. <br/>
+                  © ${new Date().getFullYear()} REACT Initiative. <br/>
                   Rural Empowerment and Climate Technology
                 </div>
               </div>

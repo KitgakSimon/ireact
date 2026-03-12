@@ -10,11 +10,9 @@ import {
   ArrowLeft,
   Bell,
   LogOut,
-  Home,
-  Key
+  Home
 } from "lucide-react";
 import Logo from "@/components/common/Logo";
-import ChangePasswordModal from "./ChangePasswordModal";
 import { cn } from "@/lib/utils";
 import { logout } from "@/lib/actions/auth";
 import { toast } from "sonner";
@@ -38,7 +36,6 @@ interface AdminNavProps {
 export default function AdminNav({ sidebarLinks, session, children }: AdminNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
-  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -242,27 +239,12 @@ export default function AdminNav({ sidebarLinks, session, children }: AdminNavPr
                   <p className="text-[9px] font-bold text-brand-cyan uppercase tracking-wider mt-1">{session.role}</p>
                 </div>
                 <div className="relative group/user">
-                  <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-brand-forest text-white flex items-center justify-center font-bold text-sm sm:text-base shadow-lg shadow-brand-forest/20">
+                  <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-brand-forest text-white flex items-center justify-center font-bold text-sm sm:text-base shadow-lg shadow-brand-forest/20" title="Profile Avatar">
                     {session.name?.charAt(0)}
                   </div>
-                  <button 
-                    onClick={() => setIsPasswordModalOpen(true)}
-                    className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-white border border-slate-100 text-slate-400 shadow-sm flex items-center justify-center hover:text-brand-forest transition-all"
-                    title="Security Settings"
-                  >
-                    <Key size={10} />
-                  </button>
                 </div>
                 
                 <div className="flex items-center gap-1 ml-1">
-                  <button 
-                    onClick={() => setIsPasswordModalOpen(true)}
-                    className="p-2 text-slate-400 hover:text-brand-forest hover:bg-slate-50 rounded-xl transition-all"
-                    title="Change Password"
-                  >
-                    <Key size={18} />
-                  </button>
-
                   <button 
                     onClick={handleLogout}
                     className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
@@ -273,11 +255,6 @@ export default function AdminNav({ sidebarLinks, session, children }: AdminNavPr
                 </div>
               </div>
             </div>
-            
-            <ChangePasswordModal 
-              isOpen={isPasswordModalOpen} 
-              onClose={() => setIsPasswordModalOpen(false)} 
-            />
           </header>
 
         <div className="flex-1 p-4 sm:p-8">
