@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "REACT Initiative | Rural Empowerment and Climate Technology",
   description: "A youth-led organization advancing climate resilience, humanitarian response, and sustainable development in underserved and rural communities.",
   keywords: ["Climate Resilience", "Sustainability", "Rural Development", "Youth Leadership", "Climate Tech", "Humanitarian Response"],
+  verification: {
+    google: "c-8xdO0w7t0pIYjsoQz6LDS0lUpb6veGwx92Hrua1DA",
+  },
 };
 
 export default function RootLayout({
