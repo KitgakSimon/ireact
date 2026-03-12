@@ -30,11 +30,15 @@ export default function ChatBot() {
   ];
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   };
 
   useEffect(() => {
-    scrollToBottom();
+    if (messages.length > 0) {
+      scrollToBottom();
+    }
   }, [messages]);
 
   const handleActionClick = (prompt: string, response: string) => {
@@ -103,9 +107,9 @@ export default function ChatBot() {
           </div>
           <button 
             onClick={() => setIsOpen(false)}
-            className="relative z-10 h-8 w-8 rounded-full hover:bg-white/10 flex items-center justify-center transition-colors"
+            className="relative z-10 h-10 w-10 rounded-full hover:bg-white/10 flex items-center justify-center transition-colors"
           >
-            <X size={18} />
+            <X size={20} />
           </button>
         </div>
 

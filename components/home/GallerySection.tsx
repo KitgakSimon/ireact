@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Maximize2 } from "lucide-react";
 import ImageLightbox from "@/components/common/ImageLightbox";
@@ -50,9 +51,11 @@ export default function GallerySection() {
               className="group relative aspect-square overflow-hidden rounded-[2.5rem] bg-slate-100 cursor-pointer shadow-sm hover:shadow-2xl transition-all"
               onClick={() => openLightbox(i)}
             >
-              <img 
+              <Image 
                 src={`/images/gallery/${img}`} 
                 alt={`Impact story ${i}`}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-110 group-hover:rotate-1"
               />
               <div className="absolute inset-0 bg-brand-dark/40 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">

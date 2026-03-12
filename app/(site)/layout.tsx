@@ -1,5 +1,7 @@
 import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
+import dynamic from "next/dynamic";
+
+const Footer = dynamic(() => import("@/components/common/Footer"), { ssr: true });
 
 export default function SiteLayout({
   children,

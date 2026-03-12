@@ -80,7 +80,7 @@ export default function AboutPage() {
             ].map((item, i) => (
               <div key={i} className="bg-white p-10 rounded-3xl shadow-sm border border-slate-100 transition-hover hover:shadow-xl hover:-translate-y-2">
                 <div className="mb-6">{item.icon}</div>
-                <h4 className="text-xl font-bold mb-4">{item.title}</h4>
+                <h3 className="text-xl font-bold mb-4">{item.title}</h3>
                 <p className="text-slate-600 leading-relaxed">{item.desc}</p>
               </div>
             ))}

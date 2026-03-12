@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import dynamic from "next/dynamic";
 import "./globals.css";
 import Preloader from "@/components/common/Preloader";
-import { Toaster } from "sonner";
-import ChatBot from "@/components/common/ChatBot";
+import ClientWrappers from "@/components/common/ClientWrappers";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "REACT Initiative | Rural Empowerment and Climate Technology",
@@ -17,10 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className="antialiased min-h-screen flex flex-col">
+      <body className={`${inter.className} antialiased min-h-screen flex flex-col`}>
         <Preloader />
-        <Toaster position="top-right" richColors />
-        <ChatBot />
+        <ClientWrappers />
         {children}
       </body>
     </html>

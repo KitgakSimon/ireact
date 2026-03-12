@@ -19,14 +19,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createBlogPost } from "@/lib/actions/blog";
 import { toast } from "sonner";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import CloudinaryUpload from "./CloudinaryUpload";
 import { cn } from "@/lib/utils";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || ""; 
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const PLACEHOLDER_IMAGE = "https://blocks.astratic.com/img/general-img-landscape.png";
 
@@ -93,7 +91,9 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
 
     setIsAiRefining(true);
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+      const { GoogleGenerativeAI } = await import("@google/generative-ai");
+      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
       const prompt = `Refine this blog post content for the REACT Initiative (Rural Empowerment and Climate Technology). 
       Make it professional, engaging, and impactful. Return the refined content in HTML format suitable for a blog post.

@@ -8,8 +8,8 @@ const contactMethods = [
   {
     icon: <Mail className="h-6 w-6 text-brand-cyan" />,
     label: "Email Us",
-    value: "info@reactinitiative.org",
-    href: "mailto:info@reactinitiative.org"
+    value: "info@ireactinitiative.org",
+    href: "mailto:info@ireactinitiative.org"
   },
   {
     icon: <Phone className="h-6 w-6 text-brand-teal" />,

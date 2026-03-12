@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect } from "react";
+import Image from "next/image";
 
 interface ImageLightboxProps {
   images: string[];
@@ -83,10 +84,13 @@ export default function ImageLightbox({
             className="relative max-w-5xl max-h-[80vh] w-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
-            <img 
+            <Image 
               src={`/images/gallery/${images[currentIndex]}`} 
               alt="Gallery Preview" 
-              className="w-full h-auto max-h-[80vh] object-contain rounded-2xl shadow-2xl"
+              fill
+              className="object-contain rounded-2xl shadow-2xl"
+              priority
+              quality={85}
             />
             
             {/* Counter */}

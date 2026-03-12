@@ -62,10 +62,12 @@ export default function GalleryPage() {
                 className="group relative overflow-hidden rounded-3xl bg-white shadow-xl transition-all hover:shadow-2xl hover:-translate-y-2 cursor-pointer"
                 onClick={() => openLightbox(i)}
               >
-                <div className="relative aspect-auto">
-                    <img 
+                <div className="relative">
+                    <Image 
                       src={`/images/gallery/${img}`} 
                       alt={`Impact story ${i}`}
+                      width={800}
+                      height={600}
                       className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-110"
                     />
                 </div>

@@ -87,7 +87,7 @@ export default function Footer() {
         <div className="mb-20 pb-16 border-b border-slate-800/50">
           <div className="grid lg:grid-cols-2 items-center gap-12 max-w-5xl mx-auto text-center lg:text-left">
             <div>
-              <h4 className="text-3xl font-extrabold text-white mb-4 tracking-tight">Stay informed with <span className="text-brand-cyan">IREACT</span></h4>
+              <h2 className="text-3xl font-extrabold text-white mb-4 tracking-tight">Stay informed with <span className="text-brand-cyan">IREACT</span></h2>
               <p className="text-slate-400 font-medium leading-relaxed">Join our global network to receive localized perspectives, research field notes, and community impact stories.</p>
             </div>
             <form onSubmit={handleSubscribe} className="relative group max-w-md w-full mx-auto lg:ml-auto lg:mr-0">
@@ -134,9 +134,10 @@ export default function Footer() {
             </p>
             <div className="flex gap-4">
               {socialLinks.map((social) => (
-                <Link 
-                  key={social.name} 
-                  href={social.href} 
+                <Link
+                  key={social.name}
+                  href={social.href}
+                  aria-label={social.name}
                   className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-800/50 text-slate-400 transition-all hover:bg-brand-forest hover:text-white hover:-translate-y-1 shadow-lg"
                 >
                   {social.icon}
@@ -147,7 +148,7 @@ export default function Footer() {
 
           {/* Site Navigation */}
           <div className="lg:pl-12">
-            <h4 className="mb-8 font-bold text-white uppercase tracking-widest text-xs">Explore</h4>
+            <h3 className="mb-8 font-bold text-white uppercase tracking-widest text-xs">Explore</h3>
             <ul className="space-y-4">
               {footerLinks.navigation.map((linkItem) => (
                 <li key={linkItem.name}>
@@ -162,7 +163,7 @@ export default function Footer() {
 
           {/* Contact Details */}
           <div className="lg:pl-12">
-            <h4 className="mb-8 font-bold text-white uppercase tracking-widest text-xs">Reach Out</h4>
+            <h3 className="mb-8 font-bold text-white uppercase tracking-widest text-xs">Reach Out</h3>
             <ul className="space-y-8">
               <li className="flex items-start gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-slate-800/50 text-brand-cyan shadow-lg">

@@ -60,7 +60,7 @@ export default function HeroCarousel({
   return (
     <section className={cn("relative flex items-center justify-center overflow-hidden pt-20 pb-40 md:pt-32", heightClasses[height], className)}>
       <div className="absolute inset-0 -z-10 bg-slate-900">
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="wait">
           <motion.div
             key={`bg-${currentIndex}`}
             initial={{ opacity: 0 }}
@@ -121,17 +121,21 @@ export default function HeroCarousel({
         </div>
       </div>
 
-      <div className="absolute bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-3 sm:gap-4 z-40 bg-black/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+      <div className="absolute bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-1 z-40 bg-black/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
         {slides.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
             aria-label={`Go to slide ${idx + 1}`}
-            className={cn(
-              "h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full transition-all duration-300",
-              currentIndex === idx ? "bg-brand-cyan w-6 sm:w-8 scale-110" : "bg-white/50 hover:bg-white"
-            )}
-          />
+            className="group flex h-10 min-w-10 items-center justify-center p-2"
+          >
+            <div className={cn(
+              "h-2 rounded-full transition-all duration-300",
+              currentIndex === idx 
+                ? "bg-brand-cyan w-6 sm:w-8 scale-110" 
+                : "bg-white/50 group-hover:bg-white w-2 sm:w-2.5"
+            )} />
+          </button>
         ))}
       </div>
 

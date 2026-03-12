@@ -134,13 +134,19 @@ export default function TestimonialSlider() {
         </div>
 
         {data.length > visibleCount && (
-          <div className="flex justify-center gap-2 mt-12">
+          <div className="flex justify-center gap-1 mt-12">
             {data.slice(0, data.length - visibleCount + 1).map((_, idx) => (
               <button 
                 key={idx} 
                 onClick={() => setCurrentIndex(idx)}
-                className={cn("h-1.5 rounded-full transition-all duration-300", currentIndex === idx ? "bg-brand-cyan w-8" : "bg-white/20 w-4 hover:bg-white/40")}
-              />
+                aria-label={`Go to slide ${idx + 1}`}
+                className="group flex h-10 min-w-10 items-center justify-center p-2"
+              >
+                <div className={cn(
+                  "h-1.5 rounded-full transition-all duration-300", 
+                  currentIndex === idx ? "bg-brand-cyan w-8" : "bg-white/20 w-4 group-hover:bg-white/40"
+                )} />
+              </button>
             ))}
           </div>
         )}

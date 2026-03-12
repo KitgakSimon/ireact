@@ -192,18 +192,20 @@ export default function TeamSection() {
         </div>
 
         {/* Slider Indicators */}
-        <div className="flex justify-center items-center gap-2 mt-20">
+        <div className="flex justify-center items-center gap-1 mt-20">
            {Array.from({ length: Math.max(0, team.length - visibleItems + 1) }).map((_, i) => (
              <button 
                key={i} 
                onClick={() => setCurrentIndex(i)}
-               className={`transition-all duration-500 rounded-full ${
-                 i === currentIndex 
-                   ? 'w-6 sm:w-8 h-1.5 sm:h-2 bg-brand-forest shadow-[0_0_10px_rgba(21,128,61,0.2)]' 
-                   : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-slate-200 hover:bg-slate-300'
-               }`}
+               className="group flex h-10 min-w-10 items-center justify-center p-2"
                aria-label={`Go to slide ${i + 1}`}
-             />
+             >
+                <div className={`transition-all duration-500 rounded-full ${
+                  i === currentIndex 
+                    ? 'w-6 sm:w-8 h-1.5 sm:h-2 bg-brand-forest shadow-[0_0_10px_rgba(21,128,61,0.2)]' 
+                    : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-slate-200 group-hover:bg-slate-300'
+                }`} />
+             </button>
            ))}
         </div>
       </div>
