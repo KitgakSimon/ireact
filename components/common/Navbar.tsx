@@ -188,6 +188,7 @@ export default function Navbar() {
         <button
           className="md:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors"
           onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>

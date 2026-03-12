@@ -26,7 +26,7 @@ export default function GallerySection() {
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div className="max-w-2xl">
-            <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-brand-cyan">Visual Impact</h2>
+            <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-brand-teal">Visual Impact</h2>
             <h3 className="text-3xl font-extrabold text-slate-900 md:text-5xl leading-tight">
               Moments of <span className="header-highlight highlight-cyan">Co-Creation</span>
             </h3>

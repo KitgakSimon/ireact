@@ -93,8 +93,8 @@ export function BlogSection({ posts }: { posts: BlogPost[] }) {
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl text-center md:text-left">
-            <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-brand-cyan flex items-center gap-3">
-              <span className="h-0.5 w-10 bg-brand-cyan"></span>
+            <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-brand-teal flex items-center gap-3">
+              <span className="h-0.5 w-10 bg-brand-teal"></span>
               Community Stories
             </h2>
             <h3 className="text-3xl font-extrabold text-slate-900 md:text-5xl leading-tight">

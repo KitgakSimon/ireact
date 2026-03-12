@@ -86,8 +86,8 @@ export default function HomeClient({ posts }: { posts: any[] }) {
 
       {/* About Section - Brief */}
       <section id="about-us" className="section-padding bg-white relative overflow-hidden square-grid">
-        <div className="absolute top-0 right-0 -mr-24 -mt-24 h-96 w-96 rounded-full bg-brand-cyan/10 blur-3xl opacity-50"></div>
-        <div className="absolute top-1/2 left-0 -ml-24 h-64 w-64 rounded-full bg-brand-forest/10 blur-3xl opacity-30"></div>
+        <div aria-hidden="true" className="absolute top-0 right-0 -mr-24 -mt-24 h-96 w-96 rounded-full bg-brand-cyan/10 blur-3xl opacity-50"></div>
+        <div aria-hidden="true" className="absolute top-1/2 left-0 -ml-24 h-64 w-64 rounded-full bg-brand-forest/10 blur-3xl opacity-30"></div>
         
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
@@ -97,8 +97,8 @@ export default function HomeClient({ posts }: { posts: any[] }) {
               viewport={{ once: true }}
               variants={fadeIn}
             >
-              <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-brand-cyan flex items-center gap-2">
-                <span className="h-0.5 w-8 bg-brand-cyan"></span>
+            <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-brand-teal flex items-center gap-2">
+                <span className="h-0.5 w-8 bg-brand-teal"></span>
                 Introduction
               </h2>
               <h3 className="mb-8 text-3xl font-extrabold leading-[1.2] text-slate-900 md:text-5xl">
@@ -248,9 +248,9 @@ export default function HomeClient({ posts }: { posts: any[] }) {
 
       {/* Approach Section */}
       <section id="approach" className="section-padding bg-slate-900 text-white relative overflow-hidden">
-        <div className="absolute inset-0 square-grid opacity-10"></div>
-        <div className="absolute bottom-0 left-0 -ml-32 -mb-32 h-[500px] w-[500px] rounded-full bg-brand-cyan/20 blur-3xl opacity-40"></div>
-        <div className="absolute top-0 right-0 -mr-32 -mt-32 h-[500px] w-[500px] rounded-full bg-brand-forest/10 blur-3xl opacity-20"></div>
+        <div aria-hidden="true" className="absolute inset-0 square-grid opacity-10"></div>
+        <div aria-hidden="true" className="absolute bottom-0 left-0 -ml-32 -mb-32 h-[500px] w-[500px] rounded-full bg-brand-cyan/20 blur-3xl opacity-40"></div>
+        <div aria-hidden="true" className="absolute top-0 right-0 -mr-32 -mt-32 h-[500px] w-[500px] rounded-full bg-brand-forest/10 blur-3xl opacity-20"></div>
         
         <div className="mx-auto max-w-7xl relative z-10">
           <div className="grid lg:grid-cols-2 gap-20 items-center">

@@ -102,7 +102,7 @@ export default function HeroCarousel({
             {slides[currentIndex].subtitle && (
               <div className="mx-auto mb-8 sm:mb-10 mt-10 sm:mt-14 max-w-2xl relative">
                 <div className="absolute -top-3 left-6 z-20">
-                  <span className="bg-slate-900 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.5em] text-white border border-white/10 rounded-full shadow-lg backdrop-blur-md">
+                  <span className="bg-slate-900 px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.5em] text-white border border-white/10 rounded-full shadow-lg backdrop-blur-md">
                     Foundation
                   </span>
                 </div>

@@ -132,13 +132,13 @@ export default function TeamSection() {
   return (
     <section className="section-padding bg-slate-50 relative overflow-hidden">
       {/* Background blobs */}
-      <div className="absolute top-0 right-0 -mr-24 -mt-24 h-96 w-96 rounded-full bg-brand-cyan/5 blur-3xl opacity-50"></div>
-      <div className="absolute bottom-0 left-0 -ml-24 -mb-24 h-96 w-96 rounded-full bg-brand-forest/5 blur-3xl opacity-50"></div>
+      <div aria-hidden="true" className="absolute top-0 right-0 -mr-24 -mt-24 h-96 w-96 rounded-full bg-brand-cyan/5 blur-3xl opacity-50"></div>
+      <div aria-hidden="true" className="absolute bottom-0 left-0 -ml-24 -mb-24 h-96 w-96 rounded-full bg-brand-forest/5 blur-3xl opacity-50"></div>
       
       <div className="container mx-auto relative z-10 px-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div className="max-w-2xl">
-            <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-brand-cyan">Our Leadership</h2>
+            <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-brand-teal">Our Leadership</h2>
             <h3 className="text-4xl font-extrabold text-slate-900 md:text-5xl lg:text-6xl mb-6 tracking-tight">
               The Minds Behind <span className="header-highlight highlight-yellow text-slate-900">IREACT</span>
             </h3>
@@ -150,6 +150,7 @@ export default function TeamSection() {
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsPaused(!isPaused)}
+              aria-label={isPaused ? "Play carousel" : "Pause carousel"}
               className="h-12 w-12 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-600 hover:text-brand-forest hover:border-brand-forest transition-all"
               title={isPaused ? "Play" : "Pause"}
             >
@@ -158,12 +159,14 @@ export default function TeamSection() {
             <div className="hidden sm:flex gap-3">
               <button 
                 onClick={prevSlide}
+                aria-label="Previous slide"
                 className="h-12 w-12 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-600 hover:text-brand-forest hover:border-brand-forest transition-all"
               >
                 <ChevronLeft size={20} />
               </button>
               <button 
                 onClick={nextSlide}
+                aria-label="Next slide"
                 className="h-12 w-12 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-600 hover:text-brand-forest hover:border-brand-forest transition-all"
               >
                 <ChevronRight size={20} />

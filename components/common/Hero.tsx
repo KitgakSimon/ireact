@@ -63,13 +63,13 @@ export default function Hero({
             "mb-8 font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-2xl",
             titleSizes[titleSize]
           )}>
-            <span className="header-highlight highlight-cyan max-md:before:!hidden">{title}</span>
+            <span className="header-highlight highlight-cyan max-md:before:hidden!">{title}</span>
           </h1>
           
           {subtitle && (
             <div className="mx-auto mb-10 mt-14 max-w-2xl relative">
               <div className="absolute -top-3 left-6 z-20">
-                <span className="bg-slate-900 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.5em] text-white border border-white/10 rounded-full shadow-lg backdrop-blur-md">
+                <span className="bg-slate-900 px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.5em] text-white border border-white/10 rounded-full shadow-lg backdrop-blur-md">
                   Foundation
                 </span>
               </div>

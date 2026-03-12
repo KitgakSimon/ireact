@@ -102,11 +102,12 @@ export default function ChatBot() {
              </div>
              <div>
                 <h3 className="font-black text-sm">IREACT Assistant</h3>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-white/70">Powered by Gemini AI</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-white/90">Powered by Gemini AI</p>
              </div>
           </div>
           <button 
             onClick={() => setIsOpen(false)}
+            aria-label="Close Assistant"
             className="relative z-10 h-10 w-10 rounded-full hover:bg-white/10 flex items-center justify-center transition-colors"
           >
             <X size={20} />
@@ -181,6 +182,7 @@ export default function ChatBot() {
             <button 
               type="submit"
               disabled={!input.trim() || isLoading}
+              aria-label="Send Message"
               className="h-11 w-11 rounded-xl bg-brand-forest text-white flex items-center justify-center hover:bg-brand-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0 shadow-sm"
             >
               <Send size={16} className="ml-0.5" />
