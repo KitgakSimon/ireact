@@ -16,33 +16,10 @@ export default function TestimonialSlider() {
   useEffect(() => {
      const fetchTestimonials = async () => {
         const result = await getTestimonials();
-        if (result.success && result.data && result.data.length > 0) {
+        if (result.success && result.data) {
            setData(result.data.filter((t: any) => t.active));
         } else {
-           // Fallback defaults
-           setData([
-            {
-              name: "Amina Yusuf",
-              role: "Community Leader",
-              content: "IREACT Initiative has completely transformed how our village approaches farming and climate resilience.",
-              image: "/images/gallery/IMG_2022.JPG",
-              rating: 5
-            },
-            {
-              name: "Dr. Samuel Okon",
-              role: "Researcher",
-              content: "Genuine commitment to bridging research and grassroots action with practical, data-driven solutions.",
-              image: "/images/gallery/IMG_2017.JPG",
-              rating: 5
-            },
-            {
-              name: "Fatima Bello",
-              role: "Local Farmer",
-              content: "The reforestation efforts are seeing life return to our soil. They inspire the next generation.",
-              image: "/images/gallery/IMG_2019.JPG",
-              rating: 5
-            }
-          ]);
+           setData([]);
         }
         setIsLoading(false);
      };

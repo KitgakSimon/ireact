@@ -12,6 +12,7 @@ import { getSession, logout } from "@/lib/actions/auth";
 const navLinks = [
   { name: "About Us", href: "/about" },
   { name: "Gallery", href: "/gallery" },
+  { name: "Research Reports", href: "/research-reports" },
   { 
     name: "Blog", 
     href: "/blog",

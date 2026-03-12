@@ -21,6 +21,7 @@ import { createBlogPost } from "@/lib/actions/blog";
 import { toast } from "sonner";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import CloudinaryUpload from "./CloudinaryUpload";
+import { cn } from "@/lib/utils";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -40,6 +41,7 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
   const [isAiRefining, setIsAiRefining] = useState(false);
   const [section, setSection] = useState(initialData?.section || "Story");
   const [published, setPublished] = useState(initialData?.published ?? false);
+  const [isFocused, setIsFocused] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -278,11 +280,16 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
           </div>
 
           <div className="space-y-4 sm:space-y-6">
-                <div className="bg-white border border-slate-100 rounded-2xl sm:rounded-3xl p-3 sm:p-4 min-h-[400px] sm:min-h-[500px] shadow-sm flex flex-col">
+                <div className={cn(
+                    "bg-white border border-slate-100 rounded-2xl sm:rounded-3xl p-3 sm:p-4 min-h-[400px] sm:min-h-[500px] shadow-sm flex flex-col transition-all",
+                    isFocused ? "ring-4 ring-brand-forest/10 border-brand-forest/30" : ""
+                )}>
                     <ReactQuill 
                       theme="snow" 
                       value={content} 
                       onChange={setContent}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
                       placeholder="Write your perspective here..."
                       className="flex-1 rounded-xl sm:rounded-3xl overflow-hidden border-none quill-editor-surface"
                   modules={{
@@ -330,7 +337,25 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
           border: none !important;
           border-bottom: 1px solid #f1f5f9 !important;
           padding: 0.75rem 1rem !important;
+          background: white;
+          z-index: 20;
+          transition: all 0.2s ease;
         }
+        
+        ${isFocused ? `
+          .quill-editor-surface .ql-toolbar {
+            position: sticky;
+            top: 144px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #e2e8f0 !important;
+          }
+          @media (min-width: 1024px) {
+            .quill-editor-surface .ql-toolbar {
+              top: 68px;
+            }
+          }
+        ` : ''}
+
         @media (min-width: 640px) {
           .quill-editor-surface .ql-toolbar {
             padding: 1rem 2rem !important;

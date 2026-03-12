@@ -174,7 +174,7 @@ export default function AdminNav({ sidebarLinks, session, children }: AdminNavPr
           >
             <div className="p-8 border-b border-slate-100 flex items-center justify-between shrink-0">
                <div>
-                 <Logo isDark className="scale-110 origin-left" />
+                 <Logo isDark className="origin-left" />
                  <p className="text-[10px] font-black uppercase tracking-widest text-brand-cyan mt-2">Administrative Portal</p>
                </div>
                <button 
@@ -264,7 +264,7 @@ export default function AdminNav({ sidebarLinks, session, children }: AdminNavPr
         {/* Admin Footer */}
         <footer className="mt-auto px-8 py-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between bg-white/50 gap-4">
            <div className="flex items-center gap-3">
-              <Logo className="h-4 w-auto grayscale opacity-50" />
+              <Logo className="h-4 w-auto" />
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Administrative Portal</span>
            </div>
            <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest text-center sm:text-right">

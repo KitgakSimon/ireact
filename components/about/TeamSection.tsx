@@ -11,11 +11,11 @@ interface TeamMember {
   name: string;
   role: string;
   bio: string;
-  image: string;
-  linkedin?: string;
-  instagram?: string;
-  facebook?: string;
-  email?: string;
+  image: string | null;
+  linkedin?: string | null;
+  instagram?: string | null;
+  facebook?: string | null;
+  email?: string | null;
 }
 
 const TeamCard = ({ member }: { member: TeamMember }) => {
@@ -81,7 +81,7 @@ export default function TeamSection() {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 640) {
-        setVisibleItems(3); 
+        setVisibleItems(1); 
       } else if (window.innerWidth < 1024) {
         setVisibleItems(2);
       } else {
@@ -97,43 +97,10 @@ export default function TeamSection() {
   useEffect(() => {
     const fetchTeam = async () => {
       const result = await getTeamMembers();
-      if (result.success && result.data && result.data.length > 0) {
-        setTeam(result.data);
+      if (result.success && result.data) {
+        setTeam(result.data as TeamMember[]);
       } else {
-        setTeam([
-          {
-            name: "Kitgak Simon",
-            role: "Chief Executive Officer",
-            bio: "A visionary youth leader and climate advocate dedicated to empowering rural communities through innovative technology and grassroots leadership.",
-            image: "/images/gallery/IMG_2006.JPG",
-            linkedin: "#",
-            email: "simon@ireact.org"
-          },
-          {
-            name: "Adamu Elisha Inuwa",
-            role: "Administrative Officer",
-            bio: "Passionate about sustainable development and operational excellence, ensuring the efficient management of IREACT initiatives and community programs.",
-            image: "/images/gallery/IMG_2007.JPG",
-            linkedin: "#",
-            email: "adamu@ireact.org"
-          },
-          {
-            name: "Sarah John",
-            role: "Program Manager",
-            bio: "Expert in community engagement and climate adaptation strategies, focused on driving impact across diverse ecosystems.",
-            image: "/images/gallery/IMG_2008.JPG",
-            linkedin: "#",
-            email: "sarah@ireact.org"
-          },
-          {
-            name: "David West",
-            role: "Technical Lead",
-            bio: "Technology enthusiast building digital tools for climate resilience and data-driven decision making in agriculture.",
-            image: "/images/gallery/IMG_2009.JPG",
-            linkedin: "#",
-            email: "david@ireact.org"
-          }
-        ]);
+        setTeam([]);
       }
       setIsLoading(false);
     };

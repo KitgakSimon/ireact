@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/actions/auth";
 import { revalidatePath } from "next/cache";
+import { recordActivity } from "./logs";
 
 export async function createBlogPost(data: { title: string; excerpt: string; content: string; image: string; section?: string; published?: boolean }) {
   const session = await getSession();
@@ -34,6 +35,12 @@ export async function createBlogPost(data: { title: string; excerpt: string; con
         published,
         section,
       },
+    });
+
+    await recordActivity({
+      action: "CREATED",
+      entity: "Post",
+      details: `Created blog post: ${title}`
     });
 
     revalidatePath("/blog");
@@ -77,6 +84,12 @@ export async function updateBlogPost(id: string, data: { title: string; excerpt:
       },
     });
 
+    await recordActivity({
+      action: "UPDATED",
+      entity: "Post",
+      details: `Updated blog post: ${title}`
+    });
+
     revalidatePath("/blog");
     revalidatePath("/admin/blog");
     revalidatePath(`/blog/${post.slug}`);
@@ -94,6 +107,12 @@ export async function deletePost(id: string) {
 
   try {
     await prisma.post.delete({ where: { id } });
+    await recordActivity({
+      action: "DELETED",
+      entity: "Post",
+      details: `Deleted blog post with ID: ${id}`
+    });
+
     revalidatePath("/admin/blog");
     return { success: true };
   } catch (error) {
@@ -146,6 +165,13 @@ export async function deleteComment(id: string) {
     }
 
     await prisma.comment.delete({ where: { id } });
+    
+    await recordActivity({
+      action: "DELETED",
+      entity: "Comment",
+      details: `Deleted comment ID: ${id}`
+    });
+
     revalidatePath("/admin/comments");
     revalidatePath(`/blog/[slug]`, "page");
     return { success: true };
@@ -181,6 +207,12 @@ export async function updateComment(id: string, data: { content: string; rating:
         content,
         rating,
       },
+    });
+
+    await recordActivity({
+      action: "UPDATED",
+      entity: "Comment",
+      details: `Updated comment ID: ${id}`
     });
 
     revalidatePath("/admin/comments");

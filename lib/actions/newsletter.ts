@@ -3,6 +3,8 @@
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { sendEmail } from "@/lib/mail";
+import { getSession } from "./auth";
+import { recordActivity } from "./logs";
 
 export async function subscribeNewsletter(formData: FormData) {
   const email = formData.get("email") as string;
@@ -67,10 +69,20 @@ export async function subscribeNewsletter(formData: FormData) {
 }
 
 export async function deleteSubscriber(id: string) {
+  const session = await getSession();
+  if (!session) return { error: "Unauthorized" };
+
   try {
     await (prisma as any).newsletter.delete({
       where: { id }
     });
+    
+    await recordActivity({
+      action: "DELETED",
+      entity: "Subscriber",
+      details: `Admin deleted subscriber (ID: ${id})`
+    });
+    
     revalidatePath("/admin/subscribers");
     return { success: true };
   } catch (error) {
@@ -140,6 +152,12 @@ export async function sendCampaign(formData: FormData) {
         template: templateId,
         sentCount
       }
+    });
+
+    await recordActivity({
+      action: "CREATED",
+      entity: "Campaign",
+      details: `Sent campaign: "${subject}" to ${sentCount} subscribers`
     });
 
     revalidatePath("/admin/subscribers");

@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
 import { sendEmail } from "@/lib/mail";
+import { recordActivity } from "./logs";
 
 export async function getTeamMembers() {
   try {
@@ -95,6 +96,12 @@ export async function createTeamMember(data: any) {
       }
     }
 
+    await recordActivity({
+      action: "CREATED",
+      entity: "TeamMember",
+      details: `Created team member: ${data.name}`
+    });
+
     revalidatePath("/admin/team");
     revalidatePath("/about");
     return { success: true, data: member };
@@ -133,6 +140,12 @@ export async function updateTeamMember(id: string, data: any) {
       });
     }
 
+    await recordActivity({
+      action: "UPDATED",
+      entity: "TeamMember",
+      details: `Updated team member: ${data.name}`
+    });
+
     revalidatePath("/admin/team");
     revalidatePath("/about");
     return { success: true, data: member };
@@ -146,6 +159,12 @@ export async function deleteTeamMember(id: string) {
     await prisma.teamMember.delete({
       where: { id },
     });
+    await recordActivity({
+      action: "DELETED",
+      entity: "TeamMember",
+      details: `Deleted team member with ID: ${id}`
+    });
+
     revalidatePath("/admin/team");
     revalidatePath("/about");
     return { success: true };

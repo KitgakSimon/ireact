@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { recordActivity } from "./logs";
 import { SignJWT, jwtVerify } from "jose";
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET || "default_secret");
@@ -98,6 +99,14 @@ export async function login(formData: FormData) {
     });
 
     revalidatePath("/");
+    
+    // Log activity
+    recordActivity({
+      action: "LOGIN",
+      entity: "Auth",
+      details: "User logged into the system"
+    }).catch(console.error);
+
     return { success: true, user: { id: user.id, email: user.email, name: user.name, role: user.role } };
   } catch (error) {
     console.error("Login error:", error);
@@ -106,6 +115,14 @@ export async function login(formData: FormData) {
 }
 
 export async function logout() {
+  const session = await getSession();
+  if (session) {
+    recordActivity({
+      action: "LOGOUT",
+      entity: "Auth",
+      details: "User logged out"
+    }).catch(console.error);
+  }
   (await cookies()).set("session", "", { expires: new Date(0) });
   revalidatePath("/");
 }
@@ -140,6 +157,12 @@ export async function changePassword(data: { oldPassword: string; newPassword: s
     await prisma.user.update({
       where: { id: user.id },
       data: { password: hashedPassword },
+    });
+
+    await recordActivity({
+      action: "UPDATED",
+      entity: "Security",
+      details: "User changed their password"
     });
 
     return { success: true };

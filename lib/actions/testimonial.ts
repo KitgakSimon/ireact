@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { recordActivity } from "./logs";
 
 export async function getTestimonials() {
   try {
@@ -26,6 +27,11 @@ export async function createTestimonial(data: any) {
         active: data.active ?? true,
       },
     });
+    await recordActivity({
+      action: "CREATED",
+      entity: "Testimonial",
+      details: `Created testimonial: ${data.name}`
+    });
     revalidatePath("/admin/testimonials");
     revalidatePath("/");
     return { success: true, data: testimonial };
@@ -47,6 +53,11 @@ export async function updateTestimonial(id: string, data: any) {
         active: data.active,
       },
     });
+    await recordActivity({
+      action: "UPDATED",
+      entity: "Testimonial",
+      details: `Updated testimonial: ${data.name}`
+    });
     revalidatePath("/admin/testimonials");
     revalidatePath("/");
     return { success: true, data: testimonial };
@@ -59,6 +70,11 @@ export async function deleteTestimonial(id: string) {
   try {
     await prisma.testimonial.delete({
       where: { id },
+    });
+    await recordActivity({
+      action: "DELETED",
+      entity: "Testimonial",
+      details: `Deleted testimonial with ID: ${id}`
     });
     revalidatePath("/admin/testimonials");
     revalidatePath("/");

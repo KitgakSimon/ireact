@@ -74,7 +74,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-slate-900 pt-24 pb-12 text-slate-300 overflow-hidden relative">
+    <footer className="bg-slate-900 pt-16 pb-12 text-slate-300 overflow-hidden relative">
       {/* Dotted Grid Background */}
       <div className="absolute inset-0 opacity-[0.06] pointer-events-none" 
            style={{ backgroundImage: 'radial-gradient(circle, #ffffff 3px, transparent 3px)', backgroundSize: '30px 30px' }}>

@@ -7,7 +7,8 @@ import {
   LayoutDashboard, 
   Mail, 
   Send,
-  Lock
+  Lock,
+  ClipboardList
 } from "lucide-react";
 import AdminNav from "@/components/admin/AdminNav";
 
@@ -28,13 +29,7 @@ export default async function AdminLayout({
     { 
       name: "Blog Posts", 
       href: "/admin/blog", 
-      icon: <FileText size={20} />,
-      subLinks: [
-        { name: "All Posts", href: "/admin/blog" },
-        { name: "Stories", href: "/admin/blog?section=Story" },
-        { name: "Strategies", href: "/admin/blog?section=Strategy" },
-        { name: "Insights", href: "/admin/blog?section=Insight" },
-      ]
+      icon: <FileText size={20} />
     },
     { name: "Team", href: "/admin/team", icon: <Users size={20} /> },
     { name: "Testimonials", href: "/admin/testimonials", icon: <MessageSquare size={20} /> },
@@ -42,6 +37,7 @@ export default async function AdminLayout({
     { name: "Subscribers", href: "/admin/subscribers", icon: <Mail size={20} /> },
     { name: "Campaigns", href: "/admin/campaigns", icon: <Send size={20} /> },
     { name: "Security", href: "/admin/settings/password", icon: <Lock size={20} /> },
+    { name: "Activity Logs", href: "/admin/logs", icon: <ClipboardList size={20} /> },
   ];
 
   return (

@@ -57,7 +57,7 @@ export default function CTA({
           transition={{ duration: 0.8 }}
           className="relative z-10"
         >
-          <h2 className="mb-8 text-4xl font-extrabold md:text-5xl tracking-tight leading-none drop-shadow-lg">
+          <h2 className="mb-8 text-4xl font-extrabold md:text-6xl tracking-tight leading-none drop-shadow-lg">
             <span className="header-highlight highlight-cyan">{title}</span>
           </h2>
           <p className="mx-auto mb-12 max-w-2xl text-xl text-white/90 leading-relaxed font-medium">

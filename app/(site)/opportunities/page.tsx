@@ -64,7 +64,7 @@ export default function OpportunitiesPage() {
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div>
               <h2 className="text-brand-forest font-bold uppercase tracking-widest text-sm mb-4">Programme Overview</h2>
-              <h3 className="text-4xl font-extrabold mb-8 text-slate-900 leading-tight">A 12-Month Journey into <span className="header-highlight highlight-forest text-slate-100">Climate Excellence</span></h3>
+              <h3 className="text-4xl font-extrabold mb-8 text-slate-900 leading-tight">A 12-Month Journey into <span className="header-highlight highlight-yellow text-slate-800">Climate Excellence</span></h3>
               <p className="text-xl text-slate-600 leading-relaxed mb-10 font-medium">
                 The REACT Ambassador Programme is designed to identify, train, and support young leaders who are passionate about scaling climate solutions in their local contexts.
               </p>
