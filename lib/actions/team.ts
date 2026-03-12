@@ -57,6 +57,7 @@ export async function createTeamMember(data: any) {
             html: `
               <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 24px; color: #1e293b; background-color: #ffffff;">
                 <div style="text-align: center; margin-bottom: 30px;">
+                  <img src="cid:logo" alt="IREACT Logo" style="height: 60px; margin-bottom: 20px;" />
                   <h1 style="color: #059669; margin: 0; font-size: 28px; font-weight: 900;">IREACT Portal</h1>
                   <p style="text-transform: uppercase; font-size: 10px; letter-spacing: 2px; font-weight: 800; color: #64748b; margin-top: 5px;">Administrative Access Granted</p>
                 </div>
