@@ -7,10 +7,10 @@ export default async function SubscribersPage() {
   });
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div>
-        <h2 className="text-3xl font-black text-slate-900 mb-2">Newsletter Subscribers</h2>
-        <p className="text-slate-500 font-medium">Manage and view all users who have subscribed to your newsletter.</p>
+        <h2 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">Newsletter Subscribers</h2>
+        <p className="text-sm sm:text-base text-slate-500 font-medium">Manage and view all users who have subscribed to your newsletter.</p>
       </div>
 
       <SubscriberList subscribers={subscribers} />
