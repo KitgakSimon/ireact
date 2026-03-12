@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import dynamic from "next/dynamic";
+import Script from "next/script";
 import "./globals.css";
 import Preloader from "@/components/common/Preloader";
 import ClientWrappers from "@/components/common/ClientWrappers";
@@ -20,6 +21,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-K9WQH1PGGF"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-K9WQH1PGGF');
+          `}
+        </Script>
+      </head>
       <body className={`${inter.className} antialiased min-h-screen flex flex-col`}>
         <Preloader />
         <ClientWrappers />
