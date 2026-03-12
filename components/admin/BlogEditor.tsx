@@ -24,7 +24,7 @@ import CloudinaryUpload from "./CloudinaryUpload";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
-const GEMINI_API_KEY = "AIzaSyCHHyQQTqPzzdcDhTV_TD6Ijqv5bCHfbLE"; // Provided by user
+const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || ""; 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const PLACEHOLDER_IMAGE = "https://blocks.astratic.com/img/general-img-landscape.png";
@@ -38,10 +38,12 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
   const [showImageInput, setShowImageInput] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [isAiRefining, setIsAiRefining] = useState(false);
+  const [section, setSection] = useState(initialData?.section || "Story");
+  const [published, setPublished] = useState(initialData?.published ?? false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const handleSave = () => {
+  const handleSave = (isPublished: boolean = published) => {
     if (!title || !content) {
       toast.error("Required Fields Missing", {
         description: "Please provide both a title and content for your story."
@@ -51,13 +53,21 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
 
     startTransition(async () => {
       let result;
+      const postData = { 
+        title, 
+        excerpt, 
+        content, 
+        image: image || PLACEHOLDER_IMAGE,
+        section,
+        published: isPublished
+      };
+
       if (initialData?.id) {
-        // We need to import updateBlogPost at the top
         result = await import("@/lib/actions/blog").then(m => 
-            m.updateBlogPost(initialData.id, { title, excerpt, content, image: image || PLACEHOLDER_IMAGE })
+            m.updateBlogPost(initialData.id, postData)
         );
       } else {
-        result = await createBlogPost({ title, excerpt, content, image: image || PLACEHOLDER_IMAGE });
+        result = await createBlogPost(postData);
       }
       
       if (result.success) {
@@ -149,24 +159,39 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
                 <span className="hidden md:inline">{image ? "Change Image" : "Add Cover"}</span>
              </button>
 
-             <button 
-               onClick={refineWithAI}
-               disabled={isAiRefining}
-               className="flex items-center gap-2 px-3 py-2 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold bg-amber-50 text-amber-600 border border-amber-100 hover:bg-amber-100 transition-all disabled:opacity-50"
-               title="AI Refine"
-             >
-                {isAiRefining ? <Loader2 size={16} className="animate-spin shrink-0" /> : <Sparkles size={16} className="shrink-0" />}
-                <span className="hidden md:inline">AI Refine</span>
-             </button>
+              <button 
+                onClick={refineWithAI}
+                disabled={isAiRefining}
+                className="flex items-center gap-2 px-3 py-2 sm:px-5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold bg-amber-50 text-amber-600 border border-amber-100 hover:bg-amber-100 transition-all disabled:opacity-50"
+                title="AI Refine"
+              >
+                 {isAiRefining ? <Loader2 size={16} className="animate-spin shrink-0" /> : <Sparkles size={16} className="shrink-0" />}
+                 <span className="hidden md:inline">AI Refine</span>
+              </button>
 
-             <button 
-               onClick={handleSave}
-               disabled={isPending}
-               className="flex items-center gap-2 px-4 py-2 sm:px-7 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-black bg-brand-forest text-white shadow-xl shadow-brand-forest/10 hover:bg-brand-dark transition-all disabled:opacity-50"
-             >
-                {isPending ? <Loader2 size={16} className="animate-spin shrink-0" /> : <Plus size={16} className="shrink-0" />}
-                <span>{initialData?.id ? "Save" : "Publish"}</span>
-             </button>
+              <button 
+                onClick={() => {
+                  setPublished(false);
+                  handleSave(false);
+                }}
+                disabled={isPending}
+                className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:border-slate-300 transition-all disabled:opacity-50"
+              >
+                 {isPending ? <Loader2 size={16} className="animate-spin shrink-0" /> : <Save size={16} className="shrink-0" />}
+                 <span>Draft</span>
+              </button>
+
+              <button 
+                onClick={() => {
+                  setPublished(true);
+                  handleSave(true);
+                }}
+                disabled={isPending}
+                className="flex items-center gap-2 px-4 py-2 sm:px-7 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-black bg-brand-forest text-white shadow-xl shadow-brand-forest/10 hover:bg-brand-dark transition-all disabled:opacity-50"
+              >
+                 {isPending ? <Loader2 size={16} className="animate-spin shrink-0" /> : <Plus size={16} className="shrink-0" />}
+                 <span>{initialData?.id ? "Update" : "Publish"}</span>
+              </button>
           </div>
       </div>
 
@@ -227,14 +252,29 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
         </div>
       ) : (
         <div className="space-y-4 sm:space-y-6">
-          <div className="relative group">
+          <div className="flex flex-col sm:flex-row gap-4 sm:items-center justify-between bg-white border border-slate-100 rounded-2xl sm:rounded-3xl px-5 py-4 sm:px-8 sm:py-6">
             <input 
               type="text" 
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Post Title..."
-              className="w-full text-xl sm:text-3xl font-black bg-white border border-slate-100 rounded-2xl sm:rounded-3xl px-5 py-4 sm:px-8 sm:py-6 placeholder:text-slate-100 focus:outline-none focus:ring-4 focus:ring-brand-cyan/5 focus:border-brand-cyan transition-all"
+              className="flex-1 text-xl sm:text-3xl font-black placeholder:text-slate-100 focus:outline-none transition-all"
             />
+            
+            <div className="flex items-center gap-3 border-t sm:border-t-0 sm:border-l border-slate-100 pt-4 sm:pt-0 sm:pl-6">
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Section</label>
+              <select 
+                value={section}
+                onChange={(e) => setSection(e.target.value)}
+                className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs font-bold text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-forest/20"
+              >
+                <option value="Story">Story</option>
+                <option value="Strategy">Strategy</option>
+                <option value="Insight">Insight</option>
+                <option value="Report">Report</option>
+                <option value="News">News</option>
+              </select>
+            </div>
           </div>
 
           <div className="space-y-4 sm:space-y-6">

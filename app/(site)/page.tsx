@@ -31,7 +31,7 @@ export default async function Home() {
       date: new Date(post.createdAt).toLocaleDateString(),
       excerpt: createExcerpt(post.content),
       image: post.image,
-      category: post.category,
+      category: post.section,
       author: post.author.name,
       rating: avgRating,
     };

@@ -4,14 +4,14 @@ import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/actions/auth";
 import { revalidatePath } from "next/cache";
 
-export async function createBlogPost(data: { title: string; excerpt: string; content: string; image: string }) {
+export async function createBlogPost(data: { title: string; excerpt: string; content: string; image: string; section?: string; published?: boolean }) {
   const session = await getSession();
 
   if (!session || session.role !== "ADMIN") {
     return { error: "Unauthorized" };
   }
 
-  const { title, excerpt, content, image } = data;
+  const { title, excerpt, content, image, section = "General", published = false } = data;
 
   if (!title || !content) {
     return { error: "Title and content are required" };
@@ -31,7 +31,8 @@ export async function createBlogPost(data: { title: string; excerpt: string; con
         image,
         slug,
         authorId: session.id as string,
-        published: true,
+        published,
+        section,
       },
     });
 
@@ -44,14 +45,14 @@ export async function createBlogPost(data: { title: string; excerpt: string; con
   }
 }
 
-export async function updateBlogPost(id: string, data: { title: string; excerpt: string; content: string; image: string }) {
+export async function updateBlogPost(id: string, data: { title: string; excerpt: string; content: string; image: string; section?: string; published?: boolean }) {
   const session = await getSession();
 
   if (!session || session.role !== "ADMIN") {
     return { error: "Unauthorized" };
   }
 
-  const { title, excerpt, content, image } = data;
+  const { title, excerpt, content, image, section, published } = data;
 
   if (!title || !content) {
     return { error: "Title and content are required" };
@@ -71,6 +72,8 @@ export async function updateBlogPost(id: string, data: { title: string; excerpt:
         content,
         image,
         slug,
+        section,
+        published,
       },
     });
 

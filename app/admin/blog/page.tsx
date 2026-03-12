@@ -34,11 +34,16 @@ export default async function AdminBlog() {
                  alt={post.title} 
                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                />
-               <div className="absolute top-4 right-4 flex gap-2">
-                  <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${post.published ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-100 text-slate-400 border border-slate-200'} backdrop-blur-md`}>
-                    {post.published ? 'Published' : 'Draft'}
-                  </span>
-               </div>
+                <div className="absolute top-4 right-4 flex gap-2 flex-wrap justify-end">
+                   {post.section && (
+                     <span className="px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-widest bg-brand-forest text-white shadow-lg">
+                       {post.section}
+                     </span>
+                   )}
+                   <span className={`px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-widest ${post.published ? 'bg-emerald-500 text-white' : 'bg-white/90 text-slate-500'} backdrop-blur-md shadow-lg border border-white/20`}>
+                     {post.published ? 'Published' : 'Draft'}
+                   </span>
+                </div>
             </div>
 
             <div className="p-6 sm:p-8 flex-1 flex flex-col">

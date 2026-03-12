@@ -120,3 +120,30 @@ export async function getSession() {
     return null;
   }
 }
+export async function changePassword(data: { oldPassword: string; newPassword: string }) {
+  const session = await getSession();
+  if (!session) return { error: "Unauthorized" };
+
+  const { oldPassword, newPassword } = data;
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: session.id as string },
+    });
+
+    if (!user) return { error: "User not found" };
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) return { error: "Incorrect current password" };
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword },
+    });
+
+    return { success: true };
+  } catch (error) {
+    return { error: "Failed to update password" };
+  }
+}

@@ -7,7 +7,7 @@ import { createTeamMember, updateTeamMember } from "@/lib/actions/team";
 import { toast } from "sonner";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const GEMINI_API_KEY = "AIzaSyCHHyQQTqPzzdcDhTV_TD6Ijqv5bCHfbLE"; // Provided by user
+const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || ""; 
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 interface TeamMemberFormProps {
@@ -32,41 +32,48 @@ export default function TeamMemberForm({ initialData, onSuccess, onCancel }: Tea
   const [isAiRefining, setIsAiRefining] = useState(false);
 
   const refineBioWithAI = async () => {
-    if (!formData.bio) {
-      toast.error("Nothing to refine", { description: "Please enter some bio text first." });
+    const isGenerating = !formData.bio;
+    
+    if (isGenerating && (!formData.name || !formData.role)) {
+      toast.error("Information Needed", { 
+        description: "Please provide a name and role so I can draft a bio for you." 
+      });
       return;
     }
 
     setIsAiRefining(true);
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+      // Using 2.5-flash as requested
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-      const prompt = `Refine this professional bio for a team member of the REACT Initiative (Rural Empowerment and Climate Technology). 
-      Make it professional, engaging, and impactful. 
-      
-      CRITICAL INSTRUCTIONS:
-      1. Return ONLY the refined bio text. 
-      2. Do NOT use ANY markdown formatting (no bold, no italics, no bullet points).
-      3. Ensure there is exactly one space between sentences.
-      4. Avoid technical jargon unless necessary.
-      
-      Current Bio: ${formData.bio}`;
+      const prompt = isGenerating 
+        ? `Write a professional, 2-3 sentence bio for a team member of the REACT Initiative (Rural Empowerment and Climate Technology).
+           Name: ${formData.name}
+           Role: ${formData.role}
+           Context: REACT focuses on climate resilience and community empowerment in rural areas.
+           Tone: Professional, inspiring, and impactful.
+           CRITICAL: Return ONLY plain text. NO markdown (no bold, no italics), NO hashtags.`
+        : `Refine this professional bio for a team member of the REACT Initiative.
+           Team Member: ${formData.name} (${formData.role})
+           Current Bio: ${formData.bio}
+           Task: Make it more engaging, professional, and impactful. 
+           CRITICAL: Return ONLY plain text. NO markdown, NO hashtags.`;
 
       const result = await model.generateContent(prompt);
       const response = await result.response;
       const text = response.text().trim();
       
-      // Remove any leftover markdown if Gemini ignores instructions
-      const cleanText = text.replace(/[*_#`~]/g, "").trim();
+      // Clean up any markdown code blocks if the model wrapped them
+      const cleanText = text.replace(/```[a-z]*\n?|```/gi, "").replace(/[*_#`~]/g, "").trim();
       
       setFormData({ ...formData, bio: cleanText });
       
-      toast.success("Bio Refined", {
-        description: "AI has polished the profile bio for clarity and impact."
+      toast.success(isGenerating ? "Bio Generated!" : "Bio Refined!", {
+        description: isGenerating ? "AI has drafted a profile based on the member's role." : "AI has polished the bio for maximum impact."
       });
     } catch (error) {
-      console.error("AI Refinement error:", error);
-      toast.error("AI Refinement Failed", {
+      console.error("AI Action error:", error);
+      toast.error("AI Service Error", {
         description: "Could not connect to the refinement service."
       });
     } finally {
@@ -146,10 +153,10 @@ export default function TeamMemberForm({ initialData, onSuccess, onCancel }: Tea
                 type="button"
                 onClick={refineBioWithAI}
                 disabled={isAiRefining}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-100 hover:bg-amber-100 transition-all disabled:opacity-50"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-100 hover:bg-amber-100 transition-all disabled:opacity-50 shadow-sm"
               >
-                {isAiRefining ? <Loader2 size={10} className="animate-spin" /> : <Sparkles size={10} />}
-                {isAiRefining ? "Refining..." : "Refine with AI"}
+                {isAiRefining ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+                {isAiRefining ? "Processing..." : formData.bio ? "Refine with AI" : "Generate Bio"}
               </button>
             </div>
             <textarea

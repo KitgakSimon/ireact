@@ -12,7 +12,16 @@ import { getSession, logout } from "@/lib/actions/auth";
 const navLinks = [
   { name: "About Us", href: "/about" },
   { name: "Gallery", href: "/gallery" },
-  { name: "Blog", href: "/blog" },
+  { 
+    name: "Blog", 
+    href: "/blog",
+    subLinks: [
+      { name: "All Posts", href: "/blog" },
+      { name: "Stories", href: "/blog?section=Story" },
+      { name: "Strategies", href: "/blog?section=Strategy" },
+      { name: "Insights", href: "/blog?section=Insight" },
+    ]
+  },
   { name: "Opportunities", href: "/opportunities" },
   { name: "Contact us", href: "/contact" },
 ];
@@ -20,6 +29,8 @@ const navLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const [blogDropdownOpen, setBlogDropdownOpen] = useState(false);
+  const [mobileBlogOpen, setMobileBlogOpen] = useState(false);
   const [session, setSession] = useState<any>(null);
   const pathname = usePathname();
   const router = useRouter();
@@ -56,16 +67,60 @@ export default function Navbar() {
         {/* Desktop Navigation */}
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className={cn(
-                "text-sm font-bold transition-colors hover:text-brand-teal",
-                pathname === link.href ? "text-brand-forest underline decoration-2 underline-offset-8" : "text-slate-600"
-              )}
-            >
-              {link.name}
-            </Link>
+            link.subLinks ? (
+              <div 
+                key={link.name} 
+                className="relative"
+                onMouseEnter={() => setBlogDropdownOpen(true)}
+                onMouseLeave={() => setBlogDropdownOpen(false)}
+              >
+                <button
+                  className={cn(
+                    "flex items-center gap-1.5 text-sm font-bold transition-all hover:text-brand-teal",
+                    pathname.startsWith(link.href) ? "text-brand-forest underline decoration-2 underline-offset-8" : "text-slate-600"
+                  )}
+                >
+                  {link.name}
+                  <ChevronDown size={14} className={cn("transition-transform duration-200", blogDropdownOpen && "rotate-180")} />
+                </button>
+
+                <AnimatePresence>
+                  {blogDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute left-1/2 -translate-x-1/2 mt-4 w-52 overflow-hidden rounded-2xl bg-white p-2 shadow-2xl border border-slate-100/50 backdrop-blur-xl"
+                    >
+                      {link.subLinks.map((sub) => (
+                        <Link
+                          key={sub.name}
+                          href={sub.href}
+                          onClick={() => setBlogDropdownOpen(false)}
+                          className={cn(
+                            "flex items-center gap-3 rounded-xl p-3 text-xs font-bold transition-all hover:bg-slate-50",
+                            pathname === sub.href ? "text-brand-forest bg-brand-forest/5" : "text-slate-600"
+                          )}
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={cn(
+                  "text-sm font-bold transition-colors hover:text-brand-teal",
+                  pathname === link.href ? "text-brand-forest underline decoration-2 underline-offset-8" : "text-slate-600"
+                )}
+              >
+                {link.name}
+              </Link>
+            )
           ))}
 
           <div className="flex items-center gap-4 border-l border-slate-200 pl-8">
@@ -148,18 +203,59 @@ export default function Navbar() {
           >
             <div className="flex flex-col gap-1 p-6">
               {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={cn(
-                    "flex items-center justify-between p-4 rounded-xl text-base font-bold transition-all",
-                    pathname === link.href ? "bg-brand-cyan/10 text-brand-forest" : "text-slate-600 hover:bg-slate-50"
+                <div key={link.name}>
+                  {link.subLinks ? (
+                    <div className="flex flex-col">
+                      <button
+                        onClick={() => setMobileBlogOpen(!mobileBlogOpen)}
+                        className={cn(
+                          "flex items-center justify-between p-4 rounded-xl text-base font-bold transition-all",
+                          pathname.startsWith(link.href) ? "bg-brand-cyan/10 text-brand-forest" : "text-slate-600 hover:bg-slate-50"
+                        )}
+                      >
+                        {link.name}
+                        <ChevronDown size={18} className={cn("transition-transform duration-200", mobileBlogOpen && "rotate-180")} />
+                      </button>
+                      <AnimatePresence>
+                        {mobileBlogOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden flex flex-col gap-1 pl-6 pr-4 pb-2"
+                          >
+                            {link.subLinks.map((sub) => (
+                              <Link
+                                key={sub.name}
+                                href={sub.href}
+                                className={cn(
+                                  "flex items-center justify-between p-3 rounded-lg text-sm font-bold transition-all",
+                                  pathname === sub.href ? "text-brand-forest" : "text-slate-500 hover:text-brand-forest"
+                                )}
+                                onClick={() => setIsOpen(false)}
+                              >
+                                {sub.name}
+                                <ArrowRight size={14} className="opacity-30" />
+                              </Link>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className={cn(
+                        "flex items-center justify-between p-4 rounded-xl text-base font-bold transition-all",
+                        pathname === link.href ? "bg-brand-cyan/10 text-brand-forest" : "text-slate-600 hover:bg-slate-50"
+                      )}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {link.name}
+                      <ArrowRight size={16} className="opacity-50" />
+                    </Link>
                   )}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.name}
-                  <ArrowRight size={16} className="opacity-50" />
-                </Link>
+                </div>
               ))}
               
               <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-3">

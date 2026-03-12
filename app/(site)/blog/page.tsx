@@ -10,9 +10,18 @@ function createExcerpt(htmlContent: string, maxLength: number = 150) {
   return plainText.substring(0, plainText.lastIndexOf(" ", maxLength)) + "...";
 }
 
-export default async function BlogListingPage() {
+export default async function BlogListingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ section?: string }>;
+}) {
+  const { section } = await searchParams;
+  
   const posts = await prisma.post.findMany({
-    where: { published: true },
+    where: { 
+      published: true,
+      ...(section ? { section } : {})
+    },
     include: { 
       author: true,
       comments: {
@@ -25,8 +34,10 @@ export default async function BlogListingPage() {
   return (
     <div className="flex flex-col">
       <Hero 
-        title="Perspectives & Insights"
-        subtitle="Exploring the frontier of climate resilience, rural technology, and community-led innovation across Sub-Saharan Africa."
+        title={section ? `${section} Insights` : "Perspectives & Insights"}
+        subtitle={section 
+          ? `Deep dive into our ${section.toLowerCase()} related research, stories, and impacts across Sub-Saharan Africa.`
+          : "Exploring the frontier of climate resilience, rural technology, and community-led innovation across Sub-Saharan Africa."}
         backgroundImage="/images/gallery/IMG_2023.JPG"
         height="half"
         titleSize="lg"
@@ -39,8 +50,12 @@ export default async function BlogListingPage() {
 
         <div className="mx-auto max-w-7xl relative z-10">
           <div className="mb-20 text-center max-w-4xl mx-auto">
-            <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-brand-cyan">Impact Stories & Research</h2>
-            <h3 className="mb-8 text-4xl font-extrabold text-slate-900 md:text-5xl">Building Resilience Through Shared Knowledge</h3>
+            <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-brand-cyan">
+              {section ? `${section} / IMPACT STORIES` : "STORY / STRATEGY / INSIGHT"}
+            </h2>
+            <h3 className="mb-8 text-4xl font-extrabold text-slate-900 md:text-5xl">
+              {section ? `Our ${section} Perspective` : "Building Resilience Through Shared Knowledge"}
+            </h3>
             <p className="text-xl text-slate-600 leading-relaxed font-medium">
               We translate global climate and development goals into community-level action by sharing research, field notes, and success stories directly from the front lines of climate action.
             </p>
@@ -57,6 +72,7 @@ export default async function BlogListingPage() {
                   date: new Date(post.createdAt).toLocaleDateString(),
                   author: post.author.name,
                   rating: avgRating,
+                  category: post.section,
                   excerpt: createExcerpt(post.content)
                 }} index={index} />
               );

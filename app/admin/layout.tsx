@@ -24,7 +24,17 @@ export default async function AdminLayout({
   const sidebarLinks = [
     { name: "Overview", href: "/admin", icon: <LayoutDashboard size={20} /> },
     { name: "Users", href: "/admin/users", icon: <Users size={20} /> },
-    { name: "Blog Posts", href: "/admin/blog", icon: <FileText size={20} /> },
+    { 
+      name: "Blog Posts", 
+      href: "/admin/blog", 
+      icon: <FileText size={20} />,
+      subLinks: [
+        { name: "All Posts", href: "/admin/blog" },
+        { name: "Stories", href: "/admin/blog?section=Story" },
+        { name: "Strategies", href: "/admin/blog?section=Strategy" },
+        { name: "Insights", href: "/admin/blog?section=Insight" },
+      ]
+    },
     { name: "Team", href: "/admin/team", icon: <Users size={20} /> },
     { name: "Testimonials", href: "/admin/testimonials", icon: <MessageSquare size={20} /> },
     { name: "Comments", href: "/admin/comments", icon: <MessageSquare size={20} /> },
