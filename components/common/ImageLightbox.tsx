@@ -81,7 +81,7 @@ export default function ImageLightbox({
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="relative max-w-5xl max-h-[80vh] w-full flex items-center justify-center"
+            className="relative max-w-5xl h-[80vh] w-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             <Image 

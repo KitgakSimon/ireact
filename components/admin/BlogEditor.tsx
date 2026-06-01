@@ -24,8 +24,6 @@ import { cn } from "@/lib/utils";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
-const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || ""; 
-
 const PLACEHOLDER_IMAGE = "https://blocks.astratic.com/img/general-img-landscape.png";
 
 export default function BlogEditor({ initialData }: { initialData?: any }) {
@@ -91,32 +89,23 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
 
     setIsAiRefining(true);
     try {
-      const { GoogleGenerativeAI } = await import("@google/generative-ai");
-      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-      const prompt = `Refine this blog post content for the REACT Initiative (Rural Empowerment and Climate Technology). 
-      Make it professional, engaging, and impactful. Return the refined content in HTML format suitable for a blog post.
+      const { refineBlogContent } = await import("@/lib/actions/blog");
+      const result = await refineBlogContent(title, excerpt, content);
       
-      Title: ${title}
-      Excerpt: ${excerpt}
-      Current Content: ${content}`;
-
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
-      
-      // Basic cleanup if Gemini wraps in markdown code blocks
-      const cleanHtml = text.replace(/```html|```/g, "").trim();
-      setContent(cleanHtml);
-      
-      toast.success("Content Refined", {
-        description: "AI has polished your story for maximum impact."
-      });
+      if (result.success && result.content) {
+        setContent(result.content);
+        toast.success("Content Refined", {
+          description: "AI has polished your story for maximum impact."
+        });
+      } else {
+        toast.error("AI Refinement Failed", {
+          description: result.error || "Could not connect to AI service."
+        });
+      }
     } catch (error) {
       console.error("AI Refinement error:", error);
       toast.error("AI Refinement Failed", {
-        description: "Could not connect to Gemini service."
+        description: "An unexpected error occurred during refinement."
       });
     } finally {
       setIsAiRefining(false);

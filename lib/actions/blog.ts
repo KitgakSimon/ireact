@@ -216,12 +216,41 @@ export async function updateComment(id: string, data: { content: string; rating:
     });
 
     revalidatePath("/admin/comments");
-    // Also revalidate the blog post page where this comment is displayed
     revalidatePath(`/blog/[slug]`, 'page');
     
     return { success: true, comment };
   } catch (error) {
     console.error("Update comment error:", error);
     return { error: "Error updating comment." };
+  }
+}
+
+export async function refineBlogContent(title: string, excerpt: string, content: string) {
+  const session = await getSession();
+  if (!session || session.role !== "ADMIN") return { error: "Unauthorized" };
+
+  try {
+    const { GoogleGenerativeAI } = await import("@google/generative-ai");
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+    const prompt = `Refine this blog post content for the REACT Initiative (Rural Empowerment and Climate Technology). 
+    Make it professional, engaging, and impactful. Return the refined content in HTML format suitable for a blog post.
+    
+    Title: ${title}
+    Excerpt: ${excerpt}
+    Current Content: ${content}`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    
+    // Basic cleanup if Gemini wraps in markdown code blocks
+    const cleanHtml = text.replace(/```html|```/g, "").trim();
+    
+    return { success: true, content: cleanHtml };
+  } catch (error) {
+    console.error("AI Refinement error:", error);
+    return { error: "Failed to connect to the AI service." };
   }
 }

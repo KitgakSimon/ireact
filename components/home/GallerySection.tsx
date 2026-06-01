@@ -8,7 +8,7 @@ import { ArrowRight, Maximize2 } from "lucide-react";
 import ImageLightbox from "@/components/common/ImageLightbox";
 
 const homeImages = [
-  "IMG_2024.JPG", "IMG_2023.JPG", "IMG_2022.JPG", "IMG_2021.JPG", 
+  "IMG_2026_1.JPG", "IMG_2026_2.JPG", "IMG_2026_3.JPG", "IMG_2021.JPG", 
   "IMG_2019.JPG", "IMG_2276.jpg"
 ];
 
