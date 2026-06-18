@@ -7,7 +7,7 @@ import { useState } from "react";
 import ImageLightbox from "@/components/common/ImageLightbox";
 
 const galleryImages = [
-  "IMG_2026_1.JPG", "IMG_2026_2.JPG", "IMG_2026_3.JPG", "IMG_2024.JPG", "IMG_2023.JPG", "IMG_2022.JPG", "IMG_2021.JPG", 
+  "IMG_2026_1.jpg", "IMG_2026_2.jpg", "IMG_2026_3.jpg", "IMG_2024.JPG", "IMG_2023.JPG", "IMG_2022.JPG", "IMG_2021.JPG", 
   "IMG_2019.JPG", "IMG_2018.JPG", "IMG_2017.JPG", "IMG_2015.JPG", 
   "IMG_2014.JPG", "IMG_2013.JPG", "IMG_2012.JPG", "IMG_2011.JPG",
   "IMG_2010.JPG", "IMG_2009.JPG", "IMG_2008.JPG", "IMG_2007.JPG",
