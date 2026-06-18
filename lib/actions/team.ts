@@ -156,9 +156,14 @@ export async function updateTeamMember(id: string, data: any) {
 
 export async function deleteTeamMember(id: string) {
   try {
-    await prisma.teamMember.delete({
+    const result = await prisma.teamMember.deleteMany({
       where: { id },
     });
+    
+    if (result.count === 0) {
+      return { success: false, error: "Team member not found or already deleted." };
+    }
+
     await recordActivity({
       action: "DELETED",
       entity: "TeamMember",
