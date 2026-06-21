@@ -8,7 +8,8 @@ import {
   Mail, 
   Send,
   Lock,
-  ClipboardList
+  ClipboardList,
+  BookOpen
 } from "lucide-react";
 import AdminNav from "@/components/admin/AdminNav";
 
@@ -31,6 +32,7 @@ export default async function AdminLayout({
       href: "/admin/blog", 
       icon: <FileText size={20} />
     },
+    { name: "Research", href: "/admin/research", icon: <BookOpen size={20} /> },
     { name: "Team", href: "/admin/team", icon: <Users size={20} /> },
     { name: "Testimonials", href: "/admin/testimonials", icon: <MessageSquare size={20} /> },
     { name: "Comments", href: "/admin/comments", icon: <MessageSquare size={20} /> },

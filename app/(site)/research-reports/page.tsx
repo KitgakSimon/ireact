@@ -1,40 +1,55 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FileText, Download, Calendar, User, Search } from "lucide-react";
+import { FileText, Download, Calendar, User, Search, ExternalLink, BookOpen } from "lucide-react";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { getResearch } from "@/lib/actions/research";
+import { subscribeNewsletter } from "@/lib/actions/newsletter";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
-const reports = [
-  {
-    id: 1,
-    title: "Regional Climate Impact Assessment 2024",
-    excerpt: "A comprehensive analysis of localized climate patterns and their socio-economic impacts on rural agricultural communities.",
-    date: "March 2024",
-    author: "Research Team",
-    category: "Climate Resilience",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80",
-  },
-  {
-    id: 2,
-    title: "Sustainable Energy Adoption in Rural Nigeria",
-    excerpt: "Evaluating the barriers and opportunities for off-grid clean energy solutions in remote underserved regions.",
-    date: "January 2024",
-    author: "Impact Analytics",
-    category: "Clean Energy",
-    image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80",
-  },
-  {
-    id: 3,
-    title: "Youth-Led Innovation for Ecosystem Restoration",
-    excerpt: "Showcasing data-driven approaches by young leaders in restoring degraded landscapes and preserving biodiversity.",
-    date: "November 2023",
-    author: "Global Leadership Lab",
-    category: "Ecosystems",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvHFYTWM3JspgG9sWCsQLjvVf7Q0EutrhBbw&s",
-  }
-];
+
 
 export default function ResearchReportsPage() {
+  const [academicResearch, setAcademicResearch] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setIsSubscribing(true);
+    const formData = new FormData();
+    formData.append("email", email);
+    
+    try {
+      const result = await subscribeNewsletter(formData);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Successfully subscribed to research updates!");
+        setEmail("");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchResearch = async () => {
+      const result = await getResearch();
+      if (result.success) {
+        setAcademicResearch(result.data || []);
+      }
+      setIsLoading(false);
+    };
+    fetchResearch();
+  }, []);
+
   return (
     <main className="min-h-screen pt-32 pb-24">
       {/* Hero Section */}
@@ -46,22 +61,18 @@ export default function ResearchReportsPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <h1 className="text-5xl lg:text-7xl font-black text-slate-900 tracking-tight leading-none mb-6">
-                Evidence-Based <br />
-                <span className="text-brand-forest">Insights</span>
+              <h1 className="text-5xl lg:text-7xl font-black text-slate-900 tracking-tight leading-none mb-6 flex items-center gap-6">
+                <BookOpen className="text-brand-forest" size={64} />
+                <div>
+                  Academic <br />
+                  <span className="text-brand-forest">Publications</span>
+                </div>
               </h1>
               <p className="text-xl text-slate-600 font-medium leading-relaxed mb-10">
                 Our research wing translates complex environmental data into actionable insights, empowering communities with the knowledge to build a sustainable future.
               </p>
               
-              <div className="relative max-w-lg">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-                <input 
-                  type="text" 
-                  placeholder="Search reports, topics, or keywords..."
-                  className="w-full bg-slate-50 border border-slate-200 rounded-3xl py-5 pl-12 pr-6 text-sm font-bold focus:ring-4 focus:ring-brand-forest/5 focus:border-brand-forest outline-none transition-all shadow-sm"
-                />
-              </div>
+
             </motion.div>
           </div>
         </div>
@@ -80,66 +91,51 @@ export default function ResearchReportsPage() {
         </div>
       </section>
 
-      {/* Reports Grid */}
-      <section className="px-6 lg:px-12">
-        <div className="mx-auto max-w-7xl">
-          <div className="flex items-center justify-between mb-12 border-b border-slate-100 pb-8">
-            <h2 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-              <FileText className="text-brand-cyan" size={28} />
-              Featured publications
-            </h2>
-            <div className="flex gap-4">
-              <span className="px-5 py-2 rounded-full bg-slate-100 text-slate-600 text-xs font-bold cursor-pointer hover:bg-slate-200 transition-colors uppercase tracking-widest">All</span>
-              <span className="px-5 py-2 rounded-full bg-white border border-slate-200 text-slate-500 text-xs font-bold cursor-pointer hover:border-brand-forest hover:text-brand-forest transition-colors uppercase tracking-widest">Reports</span>
-              <span className="px-5 py-2 rounded-full bg-white border border-slate-200 text-slate-500 text-xs font-bold cursor-pointer hover:border-brand-forest hover:text-brand-forest transition-colors uppercase tracking-widest">Data</span>
-            </div>
-          </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {reports.map((report, index) => (
-              <motion.div
-                key={report.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500"
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <Image 
-                    src={report.image} 
-                    alt={report.title} 
-                    fill 
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute top-6 left-6">
-                    <span className="bg-white/90 backdrop-blur-md text-brand-forest text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg">
-                      {report.category}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="p-10">
-                  <div className="flex items-center gap-4 text-slate-400 text-[10px] font-black uppercase tracking-widest mb-6">
-                    <span className="flex items-center gap-1.5"><Calendar size={12} /> {report.date}</span>
-                    <span className="flex items-center gap-1.5"><User size={12} /> {report.author}</span>
-                  </div>
-                  
-                  <h3 className="text-xl font-black text-slate-900 mb-4 leading-tight group-hover:text-brand-forest transition-colors">
-                    {report.title}
-                  </h3>
-                  
-                  <p className="text-slate-500 text-sm font-medium leading-relaxed mb-8">
-                    {report.excerpt}
+
+      {/* Academic Research Section from Database */}
+      <section className="px-6 lg:px-12 mt-24">
+        <div className="mx-auto max-w-7xl">
+
+
+          {isLoading ? (
+            <div className="py-12 text-center text-slate-400 font-bold animate-pulse">Loading publications...</div>
+          ) : academicResearch.length > 0 ? (
+            <div className="space-y-6">
+              {academicResearch.map((res, index) => (
+                <motion.div
+                  key={res.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                  className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl hover:border-brand-forest/30 transition-all duration-300"
+                >
+                  <p className="text-slate-900 text-lg leading-relaxed font-medium">
+                    <span className="text-brand-forest font-black mr-2">{index + 1}.</span>
+                    {res.authors} ({res.year}). <span className="font-bold text-slate-800">{res.title}</span> <i>{res.source}.</i>
                   </p>
                   
-                  <button className="flex items-center gap-2 text-brand-cyan text-sm font-black uppercase tracking-widest group/btn border-t border-slate-50 pt-6 w-full hover:text-brand-forest transition-colors">
-                    Download Report <Download size={16} className="transition-transform group-hover/btn:translate-y-1" />
-                  </button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                  {res.url && (
+                    <div className="mt-6 flex">
+                      <a 
+                        href={res.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-brand-cyan hover:text-brand-forest transition-colors bg-slate-50 px-4 py-2 rounded-xl"
+                      >
+                        View Publication <ExternalLink size={14} />
+                      </a>
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="py-12 text-center text-slate-400 font-medium">
+              No academic publications currently available.
+            </div>
+          )}
         </div>
       </section>
 
@@ -151,16 +147,24 @@ export default function ResearchReportsPage() {
             <p className="text-white/80 text-lg font-medium mb-12">
               Get the latest research and data-driven insights delivered straight to your inbox every Monday.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <input 
                 type="email" 
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your work email"
                 className="flex-1 bg-white/10 border border-white/20 rounded-2xl px-6 py-4 outline-none focus:bg-white/20 transition-all text-white placeholder:text-white/40 font-bold"
               />
-              <button className="bg-white text-brand-forest px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-slate-100 transition-colors">
+              <button 
+                type="submit" 
+                disabled={isSubscribing}
+                className="bg-white text-brand-forest px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-slate-100 transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
+              >
+                {isSubscribing && <Loader2 size={16} className="animate-spin" />}
                 Join Network
               </button>
-            </div>
+            </form>
           </div>
           
           {/* Abstract decoration */}
