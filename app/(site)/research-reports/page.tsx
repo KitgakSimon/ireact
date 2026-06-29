@@ -64,7 +64,6 @@ export default function ResearchReportsPage() {
               <h1 className="text-5xl lg:text-7xl font-black text-slate-900 tracking-tight leading-none mb-6 flex items-center gap-6">
                 <BookOpen className="text-brand-forest" size={64} />
                 <div>
-                  Academic <br />
                   <span className="text-brand-forest">Publications</span>
                 </div>
               </h1>
